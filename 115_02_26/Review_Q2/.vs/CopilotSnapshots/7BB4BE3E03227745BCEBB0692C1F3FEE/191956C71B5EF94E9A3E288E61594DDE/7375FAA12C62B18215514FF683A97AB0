@@ -1,0 +1,67 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace Q2
+{
+    public enum ServiceType
+    {
+        OilChange,
+        Lubrication,
+        RadiatorCleaning,
+        TransmissionCleaning,
+        Inspection,
+        MufflerReplacement,
+        TireRotation
+    }
+
+    public static class ServiceCalculator
+    {
+        // keep existing constant and provide alias as requested
+        public const decimal LaborRatePerHour = 600m;
+        public const decimal LABOR_RATE_PER_HOUR = LaborRatePerHour; // alias for required naming
+        public const decimal PartsTaxRate = 0.06m;
+
+        public static decimal GetBasePrice(ServiceType type)
+        {
+            return type switch
+            {
+                ServiceType.OilChange => 780m,
+                ServiceType.Lubrication => 540m,
+                ServiceType.RadiatorCleaning => 900m,
+                ServiceType.TransmissionCleaning => 2400m,
+                ServiceType.Inspection => 450m,
+                ServiceType.MufflerReplacement => 3000m,
+                ServiceType.TireRotation => 600m,
+                _ => 0m,
+            };
+        }
+
+        public static decimal CalculateLabor(decimal hours)
+        {
+            return hours * LaborRatePerHour;
+        }
+
+        public static decimal CalculatePartsTax(decimal partsCost)
+        {
+            return Math.Round(partsCost * PartsTaxRate, 2);
+        }
+    }
+
+    public class ServiceRecord
+    {
+        public DateTime Date { get; set; }
+        public string ServicesDescription { get; set; } = string.Empty; // comma separated services
+        public decimal ServiceFee { get; set; }
+        public decimal PartsCost { get; set; }
+        public decimal PartsTax { get; set; }
+        public decimal LaborHours { get; set; }
+        public decimal LaborRate { get; set; }
+        public decimal LaborFee { get; set; }
+        public decimal TotalCost { get; set; }
+
+        public ServiceRecord()
+        {
+            Date = DateTime.Now;
+        }
+    }
+}

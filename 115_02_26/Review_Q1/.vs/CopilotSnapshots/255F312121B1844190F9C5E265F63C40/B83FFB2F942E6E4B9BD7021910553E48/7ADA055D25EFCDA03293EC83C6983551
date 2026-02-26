@@ -1,0 +1,135 @@
+﻿using System;
+using System.Drawing;
+using System.Windows.Forms;
+
+namespace Q1
+{
+    public partial class Form1 : Form
+    {
+        private int playerScore = 0;
+        private int computerScore = 0;
+        private Random rng = new Random();
+
+        public Form1()
+        {
+            InitializeComponent();
+            // ensure picture boxes start empty
+            playerPictureBox.Image = null;
+            computerPictureBox.Image = null;
+            UpdateScores();
+        }
+
+        private void stoneButton_Click(object sender, EventArgs e)
+        {
+            PlayRound(Move.Rock);
+        }
+
+        private void paperButton_Click(object sender, EventArgs e)
+        {
+            PlayRound(Move.Paper);
+        }
+
+        private void scissorsButton_Click(object sender, EventArgs e)
+        {
+            PlayRound(Move.Scissors);
+        }
+
+        private void endGameButton_Click(object sender, EventArgs e)
+        {
+            string message = $"遊戲統計:\n玩家勝場: {playerScore}\n電腦勝場: {computerScore}\n\n按確定關閉程式。";
+            var dr = MessageBox.Show(message, "統計結果", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
+            if (dr == DialogResult.OK)
+            {
+                Application.Exit();
+            }
+        }
+
+        private void resetButton_Click(object sender, EventArgs e)
+        {
+            playerScore = 0;
+            computerScore = 0;
+            resultLabel.Text = "已重置，開始新遊戲";
+            playerPictureBox.Image = null;
+            computerPictureBox.Image = null;
+            UpdateScores();
+        }
+
+        private enum Move { Rock, Paper, Scissors }
+
+        private void PlayRound(Move playerMove)
+        {
+            Move computerMove = (Move)rng.Next(0, 3);
+
+            // show images for both
+            playerPictureBox.Image = GetImageForMove(playerMove);
+            computerPictureBox.Image = GetImageForMove(computerMove);
+
+            string compStr = computerMove == Move.Rock ? "石頭" : computerMove == Move.Paper ? "布" : "剪刀";
+            string playerStr = playerMove == Move.Rock ? "石頭" : playerMove == Move.Paper ? "布" : "剪刀";
+
+            int result = DetermineWinner(playerMove, computerMove);
+            if (result == 1)
+            {
+                playerScore++;
+                resultLabel.Text = $"你出 {playerStr}，電腦出 {compStr}。你贏了！";
+            }
+            else if (result == -1)
+            {
+                computerScore++;
+                resultLabel.Text = $"你出 {playerStr}，電腦出 {compStr}。你輸了。";
+            }
+            else
+            {
+                resultLabel.Text = $"你出 {playerStr}，電腦出 {compStr}。平手。";
+            }
+
+            UpdateScores();
+        }
+
+        // returns 1 if player wins, -1 if computer wins, 0 for tie
+        private int DetermineWinner(Move p, Move c)
+        {
+            if (p == c) return 0;
+            if ((p == Move.Rock && c == Move.Scissors) ||
+                (p == Move.Paper && c == Move.Rock) ||
+                (p == Move.Scissors && c == Move.Paper))
+                return 1;
+            return -1;
+        }
+
+        private void UpdateScores()
+        {
+            playerScoreLabel.Text = $"玩家勝場: {playerScore}";
+            computerScoreLabel.Text = $"電腦勝場: {computerScore}";
+        }
+
+        // create a simple bitmap representing the move (text + background)
+        private Bitmap GetImageForMove(Move m)
+        {
+            int w = playerPictureBox.Width;
+            int h = playerPictureBox.Height;
+            var bmp = new Bitmap(w, h);
+            using (var g = Graphics.FromImage(bmp))
+            {
+                g.Clear(Color.White);
+                // draw a colored circle
+                Color circleColor = m == Move.Rock ? Color.LightGray : m == Move.Paper ? Color.LightBlue : Color.LightPink;
+                using (var brush = new SolidBrush(circleColor))
+                {
+                    g.FillEllipse(brush, 10, 10, Math.Min(w, h) - 20, Math.Min(w, h) - 20);
+                }
+
+                // draw the chinese character
+                string txt = m == Move.Rock ? "石" : m == Move.Paper ? "布" : "剪";
+                using (var sf = new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center })
+                using (var font = new Font("Segoe UI", Math.Max(24, Math.Min(w, h) / 3), FontStyle.Bold, GraphicsUnit.Point))
+                using (var brush = new SolidBrush(Color.Black))
+                {
+                    Rectangle rect = new Rectangle(0, 0, w, h);
+                    g.DrawString(txt, font, brush, rect, sf);
+                }
+            }
+            return bmp;
+        }
+    }
+}

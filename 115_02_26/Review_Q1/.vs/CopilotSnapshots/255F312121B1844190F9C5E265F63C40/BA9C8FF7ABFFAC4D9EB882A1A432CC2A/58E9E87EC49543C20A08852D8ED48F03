@@ -1,0 +1,250 @@
+﻿using System;
+using System.Drawing;
+using System.Windows.Forms;
+
+namespace Q1
+{
+    public partial class Form1 : Form
+    {
+        // 玩家與電腦的勝場計數
+        private int playerScore = 0;
+        private int computerScore = 0;
+
+        // 用於產生電腦隨機出拳
+        private Random rng = new Random();
+
+        // 儲存電腦當前的選擇（Rock/Paper/Scissors）
+        private Move currentComputerChoice;
+
+        public Form1()
+        {
+            InitializeComponent();
+            // 確保一開始圖片區域為空白，符合需求
+            playerPictureBox.Image = null;
+            computerPictureBox.Image = null;
+
+            // 顯示預設提示文字
+            resultLabel.Text = "準備開始...";
+
+            // 更新分數顯示標籤
+            UpdateScores();
+        }
+
+        private void Form1_Load(object? sender, EventArgs e)
+        {
+            // 資源已在 Properties\Resources.resx 中定義，無需額外載入
+        }
+
+        /// <summary>
+        /// 玩家按下「石頭」按鈕的事件處理器
+        /// 直接啟動一回合遊戲流程，傳入玩家的出拳
+        /// </summary>
+        private void stoneButton_Click(object sender, EventArgs e)
+        {
+            PlayRound(Move.Rock);
+        }
+
+        /// <summary>
+        /// 玩家按下「布」按鈕的事件處理器
+        /// </summary>
+        private void paperButton_Click(object sender, EventArgs e)
+        {
+            PlayRound(Move.Paper);
+        }
+
+        /// <summary>
+        /// 玩家按下「剪刀」按鈕的事件處理器
+        /// </summary>
+        private void scissorsButton_Click(object sender, EventArgs e)
+        {
+            PlayRound(Move.Scissors);
+        }
+
+        /// <summary>
+        /// 結束遊戲按鈕事件
+        /// 顯示統計結果對話框，使用者按確定則關閉程式
+        /// </summary>
+        private void endGameButton_Click(object sender, EventArgs e)
+        {
+            string message = $"遊戲統計:\n玩家勝場: {playerScore}\n電腦勝場: {computerScore}\n\n按確定關閉程式。";
+            var dr = MessageBox.Show(message, "統計結果", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
+            if (dr == DialogResult.OK)
+            {
+                // 使用 Application.Exit 以確保應用程式完全關閉
+                Application.Exit();
+            }
+        }
+
+        /// <summary>
+        /// 重置按鈕事件
+        /// 將雙方勝場歸零，並清空圖片與結果顯示
+        /// </summary>
+        private void resetButton_Click(object sender, EventArgs e)
+        {
+            playerScore = 0;
+            computerScore = 0;
+            resultLabel.Text = "已重置，開始新遊戲";
+            playerPictureBox.Image = null;
+            computerPictureBox.Image = null;
+            UpdateScores();
+        }
+
+        // 定義三種出拳列舉，方便程式邏輯判斷
+        private enum Move { Rock, Paper, Scissors }
+
+        /// <summary>
+        /// 主回合流程：
+        /// 1. 產生電腦出拳
+        /// 2. 顯示玩家與電腦的圖片（優先使用專案內的圖片檔）
+        /// 3. 判斷勝負並更新分數與結果顯示
+        /// </summary>
+        private void PlayRound(Move playerMove)
+        {
+            // 產生電腦出拳（模組化）
+            getCompChoice();
+
+            // 顯示玩家與電腦的圖片，優先使用 Resources
+            showPlayerImage(playerMove);
+            showComputerImage(currentComputerChoice);
+
+            // 判斷輸贏並更新分數與結果顯示
+            showWinner(playerMove, currentComputerChoice);
+
+            // 更新分數標籤
+            UpdateScores();
+        }
+
+        /// <summary>
+        /// 產生電腦選擇並儲存在 currentComputerChoice
+        /// 使用 Random 類別，以確保每次均為隨機
+        /// </summary>
+        private void getCompChoice()
+        {
+            currentComputerChoice = (Move)rng.Next(0, 3); // 0..2
+        }
+
+        /// <summary>
+        /// 顯示電腦的圖片
+        /// 載入優先順序：Resources 資源 -> 動態備援圖
+        /// </summary>
+        private void showComputerImage(Move m)
+        {
+            // Try to use embedded resources: comp_rock, comp_paper, comp_scissors
+            Image? img = m == Move.Rock ? Properties.Resources.comp_rock as Image
+                         : m == Move.Paper ? Properties.Resources.comp_paper as Image
+                         : Properties.Resources.comp_scissors as Image;
+            computerPictureBox.Image = img ?? GetImageForMove(m);
+        }
+
+        /// <summary>
+        /// 顯示玩家的圖片，載入邏輯同上
+        /// </summary>
+        private void showPlayerImage(Move m)
+        {
+            // Try to use embedded resources: player_rock, player_paper, player_scissors
+            Image? img = m == Move.Rock ? Properties.Resources.player_rock as Image
+                         : m == Move.Paper ? Properties.Resources.player_paper as Image
+                         : Properties.Resources.player_scissors as Image;
+            playerPictureBox.Image = img ?? GetImageForMove(m);
+        }
+
+        /// <summary>
+        /// 判斷勝負邏輯：
+        /// 回傳 1 表示玩家勝，-1 表示電腦勝，0 表示平手
+        /// 此方法實作標準猜拳規則：石頭>剪刀、剪刀>布、布>石頭
+        /// </summary>
+        private int DetermineWinner(Move p, Move c)
+        {
+            if (p == c) return 0;
+            if ((p == Move.Rock && c == Move.Scissors) ||
+                (p == Move.Paper && c == Move.Rock) ||
+                (p == Move.Scissors && c == Move.Paper))
+                return 1;
+            return -1;
+        }
+
+        /// <summary>
+        /// 判斷並顯示本回合勝負
+        /// - 使用 DetermineWinner 取得結果
+        /// - 若玩家勝則 playerScore++，若電腦勝則 computerScore++，平手不增加
+        /// - 更新 resultLabel 顯示中文結果
+        /// </summary>
+        private void showWinner(Move playerMove, Move computerMove)
+        {
+            string compStr = GetMoveName(computerMove);
+            string playerStr = GetMoveName(playerMove);
+
+            int result = DetermineWinner(playerMove, computerMove);
+            if (result == 1)
+            {
+                playerScore++;
+                resultLabel.Text = $"你出 {playerStr}，電腦出 {compStr}。你贏了！";
+            }
+            else if (result == -1)
+            {
+                computerScore++;
+                resultLabel.Text = $"你出 {playerStr}，電腦出 {compStr}。你輸了。";
+            }
+            else
+            {
+                resultLabel.Text = $"你出 {playerStr}，電腦出 {compStr}。平手。";
+            }
+        }
+
+        /// <summary>
+        /// 將列舉 Move 轉為繁體中文顯示名稱
+        /// </summary>
+        private string GetMoveName(Move m)
+        {
+            return m == Move.Rock ? "石頭" : m == Move.Paper ? "布" : "剪刀";
+        }
+
+        /// <summary>
+        /// 更新分數顯示標籤（將最新勝場數顯示於 UI）
+        /// </summary>
+        private void UpdateScores()
+        {
+            playerScoreLabel.Text = $"玩家勝場: {playerScore}";
+            computerScoreLabel.Text = $"電腦勝場: {computerScore}";
+        }
+
+        /// <summary>
+        /// 當找不到圖片資源時的備援：以程式繪製簡單圖示
+        /// - 使用圓形與中文字顯示代表
+        /// - 此函式回傳一個 Bitmap，可直接設定給 PictureBox.Image
+        /// </summary>
+        private Image GetImageForMove(Move m)
+        {
+            int w = playerPictureBox.Width;
+            int h = playerPictureBox.Height;
+            var bmp = new Bitmap(w, h);
+            using (var g = Graphics.FromImage(bmp))
+            {
+                g.Clear(Color.White);
+                // 根據出拳不同填色
+                Color circleColor = m == Move.Rock ? Color.LightGray : m == Move.Paper ? Color.LightBlue : Color.LightPink;
+                using (var brush = new SolidBrush(circleColor))
+                {
+                    g.FillEllipse(brush, 10, 10, Math.Min(w, h) - 20, Math.Min(w, h) - 20);
+                }
+
+                // 在圓中央畫上中文單字（石/布/剪）作為代表
+                string txt = m == Move.Rock ? "石" : m == Move.Paper ? "布" : "剪";
+                using (var sf = new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center })
+                using (var font = new Font("Segoe UI", Math.Max(24, Math.Min(w, h) / 3), FontStyle.Bold, GraphicsUnit.Point))
+                using (var brush = new SolidBrush(Color.Black))
+                {
+                    Rectangle rect = new Rectangle(0, 0, w, h);
+                    g.DrawString(txt, font, brush, rect, sf);
+                }
+            }
+            return bmp;
+        }
+
+        // 目前沒有特殊行為，只保留空的 Click 事件處理器以避免 Designer 參考遺失
+        private void computerPictureBox_Click(object sender, EventArgs e)
+        {
+
+        }
+    }
+}

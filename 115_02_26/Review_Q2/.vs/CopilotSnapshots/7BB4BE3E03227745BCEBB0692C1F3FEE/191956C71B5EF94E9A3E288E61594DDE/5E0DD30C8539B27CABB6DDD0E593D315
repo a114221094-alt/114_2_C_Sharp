@@ -1,0 +1,275 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
+
+namespace Q2
+{
+    public partial class Form1 : Form
+    {
+        BindingList<ServiceRecord> records = new BindingList<ServiceRecord>();
+
+        public Form1()
+        {
+            InitializeComponent();
+
+            InitControls();
+
+            this.FormClosing += Form1_FormClosing;
+        }
+
+        private void InitControls()
+        {
+            // populate services
+            checkedListBoxServices.Items.AddRange(Enum.GetNames(typeof(ServiceType)));
+
+            dataGridViewRecords.AutoGenerateColumns = false;
+            dataGridViewRecords.DataSource = records;
+
+            dataGridViewRecords.Columns.Clear();
+            dataGridViewRecords.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Date", HeaderText = "Date", Width = 140 });
+            dataGridViewRecords.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "ServicesDescription", HeaderText = "Services", Width = 200 });
+            dataGridViewRecords.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "ServiceFee", HeaderText = "Service Fee" });
+            dataGridViewRecords.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "PartsCost", HeaderText = "Parts" });
+            dataGridViewRecords.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "PartsTax", HeaderText = "Parts Tax" });
+            dataGridViewRecords.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "LaborHours", HeaderText = "Labor Hours" });
+            dataGridViewRecords.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "LaborFee", HeaderText = "Labor Fee" });
+            dataGridViewRecords.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "TotalCost", HeaderText = "Total" });
+
+            numericUpDownParts.DecimalPlaces = 0;
+            numericUpDownParts.Value = 0;
+
+            numericUpDownLaborHours.Value = 0;
+
+            buttonCalculate.Click += ButtonCalculate_Click;
+            buttonAddRecord.Click += ButtonAddRecord_Click;
+            buttonExportCsv.Click += ButtonExportCsv_Click;
+            buttonReport.Click += ButtonReport_Click;
+            buttonClear.Click += ButtonClear_Click;
+            buttonSaveToFile.Click += ButtonSaveToFile_Click;
+        }
+
+        private void ButtonClear_Click(object? sender, EventArgs e)
+        {
+            for (int i = 0; i < checkedListBoxServices.Items.Count; i++)
+                checkedListBoxServices.SetItemChecked(i, false);
+
+            numericUpDownParts.Value = 0;
+            numericUpDownLaborHours.Value = 0;
+
+            labelServiceFee.Text = "Service Fee: -";
+            labelPartsCost.Text = "Parts: -";
+            labelPartsTax.Text = "Parts Tax: -";
+            labelLaborFee.Text = "Labor Fee: -";
+            labelTotal.Text = string.Empty;
+        }
+
+        private void ButtonReport_Click(object? sender, EventArgs e)
+        {
+            var total = records.Sum(r => r.TotalCost);
+            var sb = new StringBuilder();
+            sb.AppendLine($"Total Records: {records.Count}");
+            sb.AppendLine($"Total Revenue: {total:C}");
+            sb.AppendLine();
+
+            var byService = new Dictionary<ServiceType, (int Count, decimal Sum)>();
+            foreach (var rec in records)
+            {
+                // services description is comma separated, map back to service types where possible
+                var parts = rec.ServicesDescription.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim());
+                foreach (var p in parts)
+                {
+                    if (Enum.TryParse<ServiceType>(p, out var st))
+                    {
+                        if (!byService.ContainsKey(st)) byService[st] = (0, 0m);
+                        var cur = byService[st];
+                        byService[st] = (cur.Count + 1, cur.Sum + rec.TotalCost);
+                    }
+                }
+            }
+
+            sb.AppendLine("By Service Type:");
+            foreach (var kv in byService)
+            {
+                sb.AppendLine($"{kv.Key}: Count={kv.Value.Count}, Sum={kv.Value.Sum:C}");
+            }
+
+            MessageBox.Show(sb.ToString(), "Report");
+        }
+
+        private void ButtonExportCsv_Click(object? sender, EventArgs e)
+        {
+            using var sfd = new SaveFileDialog();
+            sfd.Filter = "CSV files|*.csv|All files|*.*";
+            sfd.FileName = "ServiceRecords.csv";
+            if (sfd.ShowDialog() != DialogResult.OK) return;
+
+            var lines = new List<string>();
+            lines.Add("Date,Services,ServiceFee,PartsCost,PartsTax,LaborHours,LaborFee,TotalCost");
+            foreach (var r in records)
+            {
+                lines.Add($"{r.Date:yyyy-MM-dd HH:mm},{EscapeCsv(r.ServicesDescription)},{r.ServiceFee},{r.PartsCost},{r.PartsTax},{r.LaborHours},{r.LaborFee},{r.TotalCost}");
+            }
+
+            System.IO.File.WriteAllLines(sfd.FileName, lines, Encoding.UTF8);
+            MessageBox.Show("Exported.", "Export");
+        }
+
+        private void ButtonSaveToFile_Click(object? sender, EventArgs e)
+        {
+            var rec = CreateRecordFromInputs();
+            using var sfd = new SaveFileDialog();
+            sfd.Filter = "Text files|*.txt|All files|*.*";
+            sfd.FileName = "ServiceDetail.txt";
+            if (sfd.ShowDialog() != DialogResult.OK) return;
+
+            var content = BuildDetailedReport(rec);
+            System.IO.File.WriteAllText(sfd.FileName, content, Encoding.UTF8);
+            MessageBox.Show("Saved detailed report.", "Saved");
+        }
+
+        private string EscapeCsv(string s)
+        {
+            if (s.Contains(",") || s.Contains("\""))
+            {
+                return "\"" + s.Replace("\"", "\"\"") + "\"";
+            }
+            return s;
+        }
+
+        private void ButtonAddRecord_Click(object? sender, EventArgs e)
+        {
+            var rec = CreateRecordFromInputs();
+            records.Add(rec);
+            ClearInputs();
+        }
+
+        private void ButtonCalculate_Click(object? sender, EventArgs e)
+        {
+            var rec = CreateRecordFromInputs();
+            UpdateLabels(rec);
+        }
+
+        private ServiceRecord CreateRecordFromInputs()
+        {
+            var selected = checkedListBoxServices.CheckedItems.Cast<string>().ToList();
+            decimal serviceFee = 0m;
+            foreach (var s in selected)
+            {
+                if (Enum.TryParse<ServiceType>(s, out var st))
+                {
+                    serviceFee += ServiceCalculator.GetBasePrice(st);
+                }
+            }
+
+            decimal parts = numericUpDownParts.Value;
+            decimal partsTax = ServiceCalculator.CalculatePartsTax(parts);
+            decimal hours = numericUpDownLaborHours.Value;
+            decimal laborFee = ServiceCalculator.CalculateLabor(hours);
+            decimal total = (serviceFee + laborFee) + parts + partsTax;
+
+            return new ServiceRecord
+            {
+                Date = dateTimePickerDate.Value,
+                ServicesDescription = string.Join(", ", selected),
+                ServiceFee = serviceFee,
+                PartsCost = parts,
+                PartsTax = partsTax,
+                LaborHours = hours,
+                LaborRate = ServiceCalculator.LaborRatePerHour,
+                LaborFee = laborFee,
+                TotalCost = total
+            };
+        }
+
+        private void UpdateLabels(ServiceRecord rec)
+        {
+            labelServiceFee.Text = $"Service Fee: {rec.ServiceFee:C}";
+            labelPartsCost.Text = $"Parts: {rec.PartsCost:C}";
+            labelPartsTax.Text = $"Parts Tax: {rec.PartsTax:C}";
+            labelLaborFee.Text = $"Labor Fee: {rec.LaborFee:C} ({rec.LaborHours} hr @ {rec.LaborRate:C}/hr)";
+            labelTotal.Text = $"Total: {rec.TotalCost:C}";
+        }
+
+        private void ClearInputs()
+        {
+            for (int i = 0; i < checkedListBoxServices.Items.Count; i++)
+                checkedListBoxServices.SetItemChecked(i, false);
+
+            numericUpDownParts.Value = 0;
+            numericUpDownLaborHours.Value = 0;
+
+            labelServiceFee.Text = "Service Fee: -";
+            labelPartsCost.Text = "Parts: -";
+            labelPartsTax.Text = "Parts Tax: -";
+            labelLaborFee.Text = "Labor Fee: -";
+            labelTotal.Text = string.Empty;
+        }
+
+        private string BuildDetailedReport(ServiceRecord rec)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("Auto Repair Detailed Report");
+            sb.AppendLine($"Date: {rec.Date:yyyy-MM-dd HH:mm}");
+            sb.AppendLine();
+            sb.AppendLine("Selected Services:");
+            foreach (var s in rec.ServicesDescription.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries))
+            {
+                var name = s.Trim();
+                if (Enum.TryParse<ServiceType>(name, out var st))
+                {
+                    sb.AppendLine($" - {name}: {ServiceCalculator.GetBasePrice(st):C}");
+                }
+                else
+                {
+                    sb.AppendLine($" - {name}");
+                }
+            }
+            sb.AppendLine();
+            sb.AppendLine($"Service Fee Total: {rec.ServiceFee:C}");
+            sb.AppendLine($"Labor: {rec.LaborHours} hr @ {rec.LaborRate:C}/hr = {rec.LaborFee:C}");
+            sb.AppendLine($"Parts: {rec.PartsCost:C}");
+            sb.AppendLine($"Parts Tax (6%): {rec.PartsTax:C}");
+            sb.AppendLine();
+            sb.AppendLine($"Calculation:");
+            sb.AppendLine($"Service and Labor Total = Service Fee + Labor Fee = {rec.ServiceFee:C} + {rec.LaborFee:C} = {(rec.ServiceFee + rec.LaborFee):C}");
+            sb.AppendLine($"Total = Service and Labor Total + Parts + Parts Tax = {(rec.ServiceFee + rec.LaborFee):C} + {rec.PartsCost:C} + {rec.PartsTax:C} = {rec.TotalCost:C}");
+            sb.AppendLine();
+            sb.AppendLine("--- End of Report ---");
+            return sb.ToString();
+        }
+
+        private void Form1_FormClosing(object? sender, FormClosingEventArgs e)
+        {
+            if (records.Count == 0) return;
+
+            var result = MessageBox.Show("There are saved records. Do you want to save a final detailed report before exit?\n(Yes = save to file, No = exit without saving, Cancel = stay)", "Save before exit", MessageBoxButtons.YesNoCancel);
+            if (result == DialogResult.Cancel)
+            {
+                e.Cancel = true;
+                return;
+            }
+            if (result == DialogResult.Yes)
+            {
+                using var sfd = new SaveFileDialog();
+                sfd.Filter = "Text files|*.txt|All files|*.*";
+                sfd.FileName = "ServiceRecords_Summary.txt";
+                if (sfd.ShowDialog() == DialogResult.OK)
+                {
+                    var sb = new StringBuilder();
+                    sb.AppendLine("Auto Repair Records Summary");
+                    sb.AppendLine($"Export Date: {DateTime.Now:yyyy-MM-dd HH:mm}");
+                    sb.AppendLine();
+                    foreach (var r in records)
+                    {
+                        sb.AppendLine(BuildDetailedReport(r));
+                        sb.AppendLine();
+                    }
+                    System.IO.File.WriteAllText(sfd.FileName, sb.ToString(), Encoding.UTF8);
+                }
+            }
+        }
+    }
+}

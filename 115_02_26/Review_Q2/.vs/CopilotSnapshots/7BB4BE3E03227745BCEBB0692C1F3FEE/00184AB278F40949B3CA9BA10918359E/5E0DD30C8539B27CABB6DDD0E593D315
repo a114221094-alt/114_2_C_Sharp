@@ -1,0 +1,138 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
+
+namespace Q2
+{
+    public partial class Form1 : Form
+    {
+        BindingList<ServiceRecord> records = new BindingList<ServiceRecord>();
+
+        public Form1()
+        {
+            InitializeComponent();
+
+            InitControls();
+        }
+
+        private void InitControls()
+        {
+            comboBoxServiceType.Items.AddRange(Enum.GetNames(typeof(ServiceType)));
+            comboBoxServiceType.SelectedIndex = 0;
+
+            dataGridViewRecords.AutoGenerateColumns = false;
+            dataGridViewRecords.DataSource = records;
+
+            dataGridViewRecords.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Date", HeaderText = "Date", Width = 130 });
+            dataGridViewRecords.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Service", HeaderText = "Service", Width = 120 });
+            dataGridViewRecords.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "BasePrice", HeaderText = "Base Price" });
+            dataGridViewRecords.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "PartsCost", HeaderText = "Parts" });
+            dataGridViewRecords.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "LaborHours", HeaderText = "Labor Hours" });
+            dataGridViewRecords.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "LaborRate", HeaderText = "Labor Rate" });
+            dataGridViewRecords.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "TotalCost", HeaderText = "Total" });
+
+            numericUpDownLaborRate.Value = 100m;
+            numericUpDownLaborHours.DecimalPlaces = 1;
+            numericUpDownLaborHours.Increment = 0.5m;
+
+            UpdateBasePrice();
+
+            comboBoxServiceType.SelectedIndexChanged += (s, e) => UpdateBasePrice();
+            buttonCalculate.Click += ButtonCalculate_Click;
+            buttonAddRecord.Click += ButtonAddRecord_Click;
+            buttonExportCsv.Click += ButtonExportCsv_Click;
+            buttonReport.Click += ButtonReport_Click;
+        }
+
+        private void ButtonReport_Click(object? sender, EventArgs e)
+        {
+            var total = records.Sum(r => r.TotalCost);
+            var byType = records.GroupBy(r => r.Service)
+                .Select(g => new { Service = g.Key, Count = g.Count(), Sum = g.Sum(x => x.TotalCost) })
+                .ToList();
+
+            var sb = new StringBuilder();
+            sb.AppendLine($"Total Records: {records.Count}");
+            sb.AppendLine($"Total Revenue: {total:C}");
+            sb.AppendLine();
+            sb.AppendLine("By Service Type:");
+            foreach (var t in byType)
+            {
+                sb.AppendLine($"{t.Service}: Count={t.Count}, Sum={t.Sum:C}");
+            }
+
+            MessageBox.Show(sb.ToString(), "Report");
+        }
+
+        private void ButtonExportCsv_Click(object? sender, EventArgs e)
+        {
+            using var sfd = new SaveFileDialog();
+            sfd.Filter = "CSV files|*.csv|All files|*.*";
+            sfd.FileName = "ServiceRecords.csv";
+            if (sfd.ShowDialog() != DialogResult.OK) return;
+
+            var lines = new List<string>();
+            lines.Add("Date,Service,BasePrice,PartsCost,LaborHours,LaborRate,TotalCost");
+            foreach (var r in records)
+            {
+                lines.Add($"{r.Date:yyyy-MM-dd HH:mm},{r.Service},{r.BasePrice},{r.PartsCost},{r.LaborHours},{r.LaborRate},{r.TotalCost}");
+            }
+
+            System.IO.File.WriteAllLines(sfd.FileName, lines, Encoding.UTF8);
+            MessageBox.Show("Exported.", "Export");
+        }
+
+        private void ButtonAddRecord_Click(object? sender, EventArgs e)
+        {
+            var rec = CreateRecordFromInputs();
+            records.Add(rec);
+            ClearInputs();
+        }
+
+        private void ButtonCalculate_Click(object? sender, EventArgs e)
+        {
+            var rec = CreateRecordFromInputs();
+            labelTotal.Text = rec.TotalCost.ToString("C");
+        }
+
+        private ServiceRecord CreateRecordFromInputs()
+        {
+            var type = (ServiceType)Enum.Parse(typeof(ServiceType), comboBoxServiceType.SelectedItem.ToString());
+            var basePrice = ServiceCalculator.GetBasePrice(type);
+            decimal parts = numericUpDownParts.Value;
+            decimal hours = numericUpDownLaborHours.Value;
+            decimal rate = numericUpDownLaborRate.Value;
+            var total = ServiceCalculator.CalculateTotal(basePrice, parts, hours, rate);
+
+            return new ServiceRecord
+            {
+                Date = dateTimePickerDate.Value,
+                Service = type,
+                BasePrice = basePrice,
+                PartsCost = parts,
+                LaborHours = hours,
+                LaborRate = rate,
+                TotalCost = total
+            };
+        }
+
+        private void ClearInputs()
+        {
+            numericUpDownParts.Value = 0;
+            numericUpDownLaborHours.Value = 0;
+            // keep labor rate
+            labelTotal.Text = "";
+        }
+
+        private void UpdateBasePrice()
+        {
+            var type = (ServiceType)Enum.Parse(typeof(ServiceType), comboBoxServiceType.SelectedItem.ToString());
+            numericUpDownBasePrice.Value = ServiceCalculator.GetBasePrice(type);
+        }
+    }
+}

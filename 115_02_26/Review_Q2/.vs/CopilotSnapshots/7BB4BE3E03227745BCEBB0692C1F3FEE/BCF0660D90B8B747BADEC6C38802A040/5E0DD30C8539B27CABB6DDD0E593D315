@@ -1,0 +1,294 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
+
+namespace Q2
+{
+    public partial class Form1 : Form
+    {
+        BindingList<ServiceRecord> records = new BindingList<ServiceRecord>();
+
+        public Form1()
+        {
+            InitializeComponent();
+
+            InitControls();
+
+            this.FormClosing += Form1_FormClosing;
+        }
+
+        private void InitControls()
+        {
+            // populate services with ServiceItem to show Chinese
+            checkedListBoxServices.Items.Clear();
+            foreach (ServiceType st in Enum.GetValues(typeof(ServiceType)))
+            {
+                checkedListBoxServices.Items.Add(new ServiceItem(st));
+            }
+
+            dataGridViewRecords.AutoGenerateColumns = false;
+            dataGridViewRecords.DataSource = records;
+
+            dataGridViewRecords.Columns.Clear();
+            dataGridViewRecords.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Date", HeaderText = "日期", Width = 140 });
+            dataGridViewRecords.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "ServicesDescription", HeaderText = "服務項目", Width = 200 });
+
+            var colServiceFee = new DataGridViewTextBoxColumn { DataPropertyName = "ServiceFee", HeaderText = "服務費" };
+            colServiceFee.DefaultCellStyle.Format = "C";
+            dataGridViewRecords.Columns.Add(colServiceFee);
+
+            var colParts = new DataGridViewTextBoxColumn { DataPropertyName = "PartsCost", HeaderText = "零件費" };
+            colParts.DefaultCellStyle.Format = "C";
+            dataGridViewRecords.Columns.Add(colParts);
+
+            var colPartsTax = new DataGridViewTextBoxColumn { DataPropertyName = "PartsTax", HeaderText = "零件稅" };
+            colPartsTax.DefaultCellStyle.Format = "C";
+            dataGridViewRecords.Columns.Add(colPartsTax);
+
+            dataGridViewRecords.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "LaborHours", HeaderText = "工時" });
+
+            var colLaborFee = new DataGridViewTextBoxColumn { DataPropertyName = "LaborFee", HeaderText = "工資" };
+            colLaborFee.DefaultCellStyle.Format = "C";
+            dataGridViewRecords.Columns.Add(colLaborFee);
+
+            var colTotal = new DataGridViewTextBoxColumn { DataPropertyName = "TotalCost", HeaderText = "總計" };
+            colTotal.DefaultCellStyle.Format = "C";
+            dataGridViewRecords.Columns.Add(colTotal);
+
+            numericUpDownParts.DecimalPlaces = 0;
+            numericUpDownParts.Value = 0;
+
+            numericUpDownLaborHours.Value = 0;
+
+            buttonCalculate.Click += ButtonCalculate_Click;
+            buttonAddRecord.Click += ButtonAddRecord_Click;
+            buttonExportCsv.Click += ButtonExportCsv_Click;
+            buttonReport.Click += ButtonReport_Click;
+            buttonClear.Click += ButtonClear_Click;
+            buttonSaveToFile.Click += ButtonSaveToFile_Click;
+        }
+
+        private void ButtonClear_Click(object? sender, EventArgs e)
+        {
+            for (int i = 0; i < checkedListBoxServices.Items.Count; i++)
+                checkedListBoxServices.SetItemChecked(i, false);
+
+            numericUpDownParts.Value = 0;
+            numericUpDownLaborHours.Value = 0;
+
+            labelServiceFee.Text = "服務費: -";
+            labelPartsCost.Text = "零件費: -";
+            labelPartsTax.Text = "零件稅: -";
+            labelLaborFee.Text = "工資: -";
+            labelTotal.Text = "總計: -";
+        }
+
+        private void ButtonReport_Click(object? sender, EventArgs e)
+        {
+            var total = records.Sum(r => r.TotalCost);
+            var sb = new StringBuilder();
+            sb.AppendLine($"總筆數: {records.Count}");
+            sb.AppendLine($"總營收: {total:C}");
+            sb.AppendLine();
+
+            var byService = new Dictionary<ServiceType, (int Count, decimal Sum)>();
+            foreach (var rec in records)
+            {
+                // services description is comma separated display names (Chinese)
+                var parts = rec.ServicesDescription.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim());
+                foreach (var p in parts)
+                {
+                    if (ServiceCalculator.TryGetServiceTypeByDisplayName(p, out var st))
+                    {
+                        if (!byService.ContainsKey(st)) byService[st] = (0, 0m);
+                        var cur = byService[st];
+                        byService[st] = (cur.Count + 1, cur.Sum + rec.TotalCost);
+                    }
+                }
+            }
+
+            sb.AppendLine("依服務分類:");
+            foreach (var kv in byService)
+            {
+                sb.AppendLine($"{ServiceCalculator.GetDisplayName(kv.Key)}: 筆數={kv.Value.Count}, 金額={kv.Value.Sum:C}");
+            }
+
+            MessageBox.Show(sb.ToString(), "報表");
+        }
+
+        private void ButtonExportCsv_Click(object? sender, EventArgs e)
+        {
+            using var sfd = new SaveFileDialog();
+            sfd.Filter = "CSV 檔|*.csv|所有檔案|*.*";
+            sfd.FileName = "ServiceRecords.csv";
+            if (sfd.ShowDialog() != DialogResult.OK) return;
+
+            var lines = new List<string>();
+            lines.Add("日期,服務項目,服務費,零件費,零件稅,工時,工資,總計");
+            foreach (var r in records)
+            {
+                lines.Add($"{r.Date:yyyy-MM-dd HH:mm},{EscapeCsv(r.ServicesDescription)},{r.ServiceFee},{r.PartsCost},{r.PartsTax},{r.LaborHours},{r.LaborFee},{r.TotalCost}");
+            }
+
+            System.IO.File.WriteAllLines(sfd.FileName, lines, Encoding.UTF8);
+            MessageBox.Show("匯出完成。", "匯出");
+        }
+
+        private void ButtonSaveToFile_Click(object? sender, EventArgs e)
+        {
+            var rec = CreateRecordFromInputs();
+            using var sfd = new SaveFileDialog();
+            sfd.Filter = "文字檔|*.txt|所有檔案|*.*";
+            sfd.FileName = "ServiceDetail.txt";
+            if (sfd.ShowDialog() != DialogResult.OK) return;
+
+            var content = BuildDetailedReport(rec);
+            System.IO.File.WriteAllText(sfd.FileName, content, Encoding.UTF8);
+            MessageBox.Show("已儲存詳細報表。", "儲存");
+        }
+
+        private string EscapeCsv(string s)
+        {
+            if (s.Contains(",") || s.Contains("\""))
+            {
+                return "\"" + s.Replace("\"", "\"\"") + "\"";
+            }
+            return s;
+        }
+
+        private void ButtonAddRecord_Click(object? sender, EventArgs e)
+        {
+            var rec = CreateRecordFromInputs();
+            records.Add(rec);
+            ClearInputs();
+        }
+
+        private void ButtonCalculate_Click(object? sender, EventArgs e)
+        {
+            var rec = CreateRecordFromInputs();
+            UpdateLabels(rec);
+        }
+
+        private ServiceRecord CreateRecordFromInputs()
+        {
+            var selected = checkedListBoxServices.CheckedItems.Cast<ServiceItem>().ToList();
+            decimal serviceFee = 0m;
+            var displayNames = new List<string>();
+            foreach (var item in selected)
+            {
+                serviceFee += ServiceCalculator.GetBasePrice(item.Type);
+                displayNames.Add(item.DisplayName);
+            }
+
+            decimal parts = numericUpDownParts.Value;
+            decimal partsTax = ServiceCalculator.CalculatePartsTax(parts);
+            decimal hours = numericUpDownLaborHours.Value;
+            decimal laborFee = ServiceCalculator.CalculateLabor(hours);
+            decimal total = (serviceFee + laborFee) + parts + partsTax;
+
+            return new ServiceRecord
+            {
+                Date = dateTimePickerDate.Value,
+                ServicesDescription = string.Join(", ", displayNames),
+                ServiceFee = serviceFee,
+                PartsCost = parts,
+                PartsTax = partsTax,
+                LaborHours = hours,
+                LaborRate = ServiceCalculator.LaborRatePerHour,
+                LaborFee = laborFee,
+                TotalCost = total
+            };
+        }
+
+        private void UpdateLabels(ServiceRecord rec)
+        {
+            labelServiceFee.Text = $"服務費: {rec.ServiceFee:C}";
+            labelPartsCost.Text = $"零件費: {rec.PartsCost:C}";
+            labelPartsTax.Text = $"零件稅: {rec.PartsTax:C}";
+            labelLaborFee.Text = $"工資: {rec.LaborFee:C} ({rec.LaborHours} hr @ {rec.LaborRate:C}/hr)";
+            labelTotal.Text = $"總計: {rec.TotalCost:C}";
+        }
+
+        private void ClearInputs()
+        {
+            for (int i = 0; i < checkedListBoxServices.Items.Count; i++)
+                checkedListBoxServices.SetItemChecked(i, false);
+
+            numericUpDownParts.Value = 0;
+            numericUpDownLaborHours.Value = 0;
+
+            labelServiceFee.Text = "服務費: -";
+            labelPartsCost.Text = "零件費: -";
+            labelPartsTax.Text = "零件稅: -";
+            labelLaborFee.Text = "工資: -";
+            labelTotal.Text = "總計: -";
+        }
+
+        private string BuildDetailedReport(ServiceRecord rec)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("車輛維修詳細報表");
+            sb.AppendLine($"日期: {rec.Date:yyyy-MM-dd HH:mm}");
+            sb.AppendLine();
+            sb.AppendLine("服務項目:");
+            foreach (var s in rec.ServicesDescription.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries))
+            {
+                var name = s.Trim();
+                if (ServiceCalculator.TryGetServiceTypeByDisplayName(name, out var st))
+                {
+                    sb.AppendLine($" - {name}: {ServiceCalculator.GetBasePrice(st):C}");
+                }
+                else
+                {
+                    sb.AppendLine($" - {name}");
+                }
+            }
+            sb.AppendLine();
+            sb.AppendLine($"服務費小計: {rec.ServiceFee:C}");
+            sb.AppendLine($"工資: {rec.LaborHours} 小時 @ {rec.LaborRate:C}/小時 = {rec.LaborFee:C}");
+            sb.AppendLine($"零件費: {rec.PartsCost:C}");
+            sb.AppendLine($"零件稅 (6%): {rec.PartsTax:C}");
+            sb.AppendLine();
+            sb.AppendLine($"計算過程:");
+            sb.AppendLine($"服務與工資總額 = 服務費 + 工資 = {rec.ServiceFee:C} + {rec.LaborFee:C} = {(rec.ServiceFee + rec.LaborFee):C}");
+            sb.AppendLine($"總費用 = 服務與工資總額 + 零件費 + 零件稅 = {(rec.ServiceFee + rec.LaborFee):C} + {rec.PartsCost:C} + {rec.PartsTax:C} = {rec.TotalCost:C}");
+            sb.AppendLine();
+            sb.AppendLine("--- 報表結束 ---");
+            return sb.ToString();
+        }
+
+        private void Form1_FormClosing(object? sender, FormClosingEventArgs e)
+        {
+            if (records.Count == 0) return;
+
+            var result = MessageBox.Show("有儲存的紀錄，是否在離開前儲存完整報表？\n(是 = 儲存, 否 = 直接離開, 取消 = 返回程式)", "關閉前儲存", MessageBoxButtons.YesNoCancel);
+            if (result == DialogResult.Cancel)
+            {
+                e.Cancel = true;
+                return;
+            }
+            if (result == DialogResult.Yes)
+            {
+                using var sfd = new SaveFileDialog();
+                sfd.Filter = "文字檔|*.txt|所有檔案|*.*";
+                sfd.FileName = "ServiceRecords_Summary.txt";
+                if (sfd.ShowDialog() == DialogResult.OK)
+                {
+                    var sb = new StringBuilder();
+                    sb.AppendLine("車輛維修紀錄匯總");
+                    sb.AppendLine($"匯出時間: {DateTime.Now:yyyy-MM-dd HH:mm}");
+                    sb.AppendLine();
+                    foreach (var r in records)
+                    {
+                        sb.AppendLine(BuildDetailedReport(r));
+                        sb.AppendLine();
+                    }
+                    System.IO.File.WriteAllText(sfd.FileName, sb.ToString(), Encoding.UTF8);
+                }
+            }
+        }
+    }
+}

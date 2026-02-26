@@ -1,0 +1,173 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace Q2
+{
+    /// <summary>
+    /// 服務類型列舉。
+    /// 使用此列舉來代表應用程式中所有可選取的維修服務項目。
+    /// 中文顯示名稱透過 ServiceCalculator.GetDisplayName() 取得。
+    /// </summary>
+    public enum ServiceType
+    {
+        OilChange,
+        Lubrication,
+        RadiatorCleaning,
+        TransmissionCleaning,
+        Inspection,
+        MufflerReplacement,
+        TireRotation
+    }
+
+    /// <summary>
+    /// 提供計算相關費用的靜態方法。
+    /// 包含：基礎服務價格、工時費用、零件稅計算，以及顯示名稱對應等輔助方法。
+    /// 所有金額採用 decimal 型別以避免浮點誤差，並使用常數定義稅率與工時費率。
+    /// </summary>
+    public static class ServiceCalculator
+    {
+        // 每小時工資費率（常數）
+        public const decimal LaborRatePerHour = 600m;
+        // 提供符合作業要求的命名別名
+        public const decimal LABOR_RATE_PER_HOUR = LaborRatePerHour; // alias for required naming
+        // 零件稅率（6%）
+        public const decimal PartsTaxRate = 0.06m;
+
+        /// <summary>
+        /// 取得指定服務類型的基礎收費（固定金額）。
+        /// 傳入 ServiceType，回傳對應的台幣價格（decimal）。
+        /// </summary>
+        /// <param name="type">欲查詢的服務類型</param>
+        /// <returns>該服務的固定收費金額（NT$）</returns>
+        public static decimal GetBasePrice(ServiceType type)
+        {
+            return type switch
+            {
+                ServiceType.OilChange => 780m,
+                ServiceType.Lubrication => 540m,
+                ServiceType.RadiatorCleaning => 900m,
+                ServiceType.TransmissionCleaning => 2400m,
+                ServiceType.Inspection => 450m,
+                ServiceType.MufflerReplacement => 3000m,
+                ServiceType.TireRotation => 600m,
+                _ => 0m,
+            };
+        }
+
+        /// <summary>
+        /// 根據工時數計算工資（工時 * 每小時費率）。
+        /// 使用 decimal 進行計算並回傳結果。
+        /// </summary>
+        /// <param name="hours">工時數（可為小數，例如 1.5）</param>
+        /// <returns>工資總額（NT$）</returns>
+        public static decimal CalculateLabor(decimal hours)
+        {
+            return hours * LaborRatePerHour;
+        }
+
+        /// <summary>
+        /// 計算零件稅金（目前稅率為 6%），並四捨五入到小數點後兩位。
+        /// 只對零件費用部分課稅，並回傳計算後的稅額。
+        /// </summary>
+        /// <param name="partsCost">零件費用（NT$）</param>
+        /// <returns>零件稅金（NT$，四捨五入到小數第二位）</returns>
+        public static decimal CalculatePartsTax(decimal partsCost)
+        {
+            return Math.Round(partsCost * PartsTaxRate, 2);
+        }
+
+        /// <summary>
+        /// 回傳服務類型的繁體中文顯示名稱。
+        /// UI 顯示時應使用此方法取得友善的中文名稱。
+        /// </summary>
+        /// <param name="type">服務類型</param>
+        /// <returns>該服務的繁體中文名稱</returns>
+        public static string GetDisplayName(ServiceType type)
+        {
+            return type switch
+            {
+                ServiceType.OilChange => "機油更換",
+                ServiceType.Lubrication => "潤滑保養",
+                ServiceType.RadiatorCleaning => "水箱清洗",
+                ServiceType.TransmissionCleaning => "變速箱清洗",
+                ServiceType.Inspection => "檢驗",
+                ServiceType.MufflerReplacement => "更換消音器",
+                ServiceType.TireRotation => "輪胎換位",
+                _ => type.ToString(),
+            };
+        }
+
+        /// <summary>
+        /// 嘗試依顯示名稱（中文）取得對應的 ServiceType。
+        /// 主要用於將 UI 上的中文名稱反查回 enum 值。
+        /// 比較採用嚴格字串比對（區分大小寫），若需不區分大小寫可修改比較方式。
+        /// </summary>
+        /// <param name="display">顯示名稱（中文）</param>
+        /// <param name="type">輸出對應的 ServiceType（若有找到）</param>
+        /// <returns>若找到對應的 ServiceType 回傳 true，否則回傳 false。</returns>
+        public static bool TryGetServiceTypeByDisplayName(string display, out ServiceType type)
+        {
+            foreach (ServiceType st in Enum.GetValues(typeof(ServiceType)))
+            {
+                if (GetDisplayName(st).Equals(display, StringComparison.Ordinal))
+                {
+                    type = st;
+                    return true;
+                }
+            }
+            type = default;
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// 在 CheckedListBox 中使用的項目類別，
+    /// 可同時保存 enum 與其中文顯示名稱。
+    /// ToString() 會回傳 DisplayName，讓 UI 直接顯示中文。
+    /// </summary>
+    public class ServiceItem
+    {
+        /// <summary>服務類型 enum</summary>
+        public ServiceType Type { get; }
+        /// <summary>繁體中文顯示名稱</summary>
+        public string DisplayName { get; }
+        public ServiceItem(ServiceType type)
+        {
+            Type = type;
+            DisplayName = ServiceCalculator.GetDisplayName(type);
+        }
+        public override string ToString() => DisplayName;
+    }
+
+    /// <summary>
+    /// 儲存單筆維修服務明細的資料結構。
+    /// 包含：日期、選取之服務（以中文顯示名稱串接）、各項費用與總計。
+    /// 使用 decimal 儲存金額以確保精準度。
+    /// </summary>
+    public class ServiceRecord
+    {
+        /// <summary>服務紀錄時間</summary>
+        public DateTime Date { get; set; }
+        /// <summary>選取的服務項目（以中文顯示名稱，用逗號分隔）</summary>
+        public string ServicesDescription { get; set; } = string.Empty; // comma separated display names (Chinese)
+        /// <summary>服務費小計（僅服務項目的固定收費總和）</summary>
+        public decimal ServiceFee { get; set; }
+        /// <summary>零件費用（使用者輸入）</summary>
+        public decimal PartsCost { get; set; }
+        /// <summary>零件稅（PartsCost * 6%）</summary>
+        public decimal PartsTax { get; set; }
+        /// <summary>工時數（小時）</summary>
+        public decimal LaborHours { get; set; }
+        /// <summary>工時費率（每小時）</summary>
+        public decimal LaborRate { get; set; }
+        /// <summary>工資總額（LaborHours * LaborRate）</summary>
+        public decimal LaborFee { get; set; }
+        /// <summary>所有費用加總後的總計（Service + Labor + Parts + Tax）</summary>
+        public decimal TotalCost { get; set; }
+
+        public ServiceRecord()
+        {
+            Date = DateTime.Now;
+        }
+    }
+}

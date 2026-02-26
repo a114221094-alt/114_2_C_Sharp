@@ -1,0 +1,255 @@
+﻿namespace Q2
+{
+    partial class Form1
+    {
+        /// <summary>
+        ///  Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        // UI control fields
+        private System.Windows.Forms.CheckedListBox checkedListBoxServices;
+        private System.Windows.Forms.NumericUpDown numericUpDownParts;
+        private System.Windows.Forms.NumericUpDown numericUpDownLaborHours;
+        private System.Windows.Forms.Button buttonCalculate;
+        private System.Windows.Forms.Button buttonAddRecord;
+        private System.Windows.Forms.Button buttonExportCsv;
+        private System.Windows.Forms.Button buttonReport;
+        private System.Windows.Forms.Button buttonClear;
+        private System.Windows.Forms.Button buttonSaveToFile;
+        private System.Windows.Forms.Label labelServiceFee;
+        private System.Windows.Forms.Label labelPartsCost;
+        private System.Windows.Forms.Label labelPartsTax;
+        private System.Windows.Forms.Label labelLaborFee;
+        private System.Windows.Forms.Label labelTotal;
+        private System.Windows.Forms.DataGridView dataGridViewRecords;
+        private System.Windows.Forms.DateTimePicker dateTimePickerDate;
+
+        /// <summary>
+        ///  Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        ///  Required method for Designer support - do not modify
+        ///  the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            this.components = new System.ComponentModel.Container();
+            this.checkedListBoxServices = new System.Windows.Forms.CheckedListBox();
+            this.numericUpDownParts = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDownLaborHours = new System.Windows.Forms.NumericUpDown();
+            this.buttonCalculate = new System.Windows.Forms.Button();
+            this.buttonAddRecord = new System.Windows.Forms.Button();
+            this.buttonExportCsv = new System.Windows.Forms.Button();
+            this.buttonReport = new System.Windows.Forms.Button();
+            this.buttonClear = new System.Windows.Forms.Button();
+            this.buttonSaveToFile = new System.Windows.Forms.Button();
+            this.labelServiceFee = new System.Windows.Forms.Label();
+            this.labelPartsCost = new System.Windows.Forms.Label();
+            this.labelPartsTax = new System.Windows.Forms.Label();
+            this.labelLaborFee = new System.Windows.Forms.Label();
+            this.labelTotal = new System.Windows.Forms.Label();
+            this.dataGridViewRecords = new System.Windows.Forms.DataGridView();
+            this.dateTimePickerDate = new System.Windows.Forms.DateTimePicker();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownParts)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLaborHours)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRecords)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // checkedListBoxServices
+            // 
+            this.checkedListBoxServices.FormattingEnabled = true;
+            this.checkedListBoxServices.Location = new System.Drawing.Point(12, 12);
+            this.checkedListBoxServices.Name = "checkedListBoxServices";
+            this.checkedListBoxServices.Size = new System.Drawing.Size(200, 124);
+            this.checkedListBoxServices.TabIndex = 0;
+            // 
+            // numericUpDownParts
+            // 
+            this.numericUpDownParts.Location = new System.Drawing.Point(230, 12);
+            this.numericUpDownParts.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.numericUpDownParts.Name = "numericUpDownParts";
+            this.numericUpDownParts.Size = new System.Drawing.Size(120, 23);
+            this.numericUpDownParts.TabIndex = 1;
+            // 
+            // numericUpDownLaborHours
+            // 
+            this.numericUpDownLaborHours.Location = new System.Drawing.Point(230, 50);
+            this.numericUpDownLaborHours.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.numericUpDownLaborHours.DecimalPlaces = 1;
+            this.numericUpDownLaborHours.Increment = new decimal(new int[] {5,0,0,65536});
+            this.numericUpDownLaborHours.Name = "numericUpDownLaborHours";
+            this.numericUpDownLaborHours.Size = new System.Drawing.Size(120, 23);
+            this.numericUpDownLaborHours.TabIndex = 2;
+            // 
+            // buttonCalculate
+            // 
+            this.buttonCalculate.Location = new System.Drawing.Point(12, 150);
+            this.buttonCalculate.Name = "buttonCalculate";
+            this.buttonCalculate.Size = new System.Drawing.Size(100, 30);
+            this.buttonCalculate.TabIndex = 3;
+            this.buttonCalculate.Text = "計算";
+            this.buttonCalculate.UseVisualStyleBackColor = true;
+            // 
+            // buttonAddRecord
+            // 
+            this.buttonAddRecord.Location = new System.Drawing.Point(120, 150);
+            this.buttonAddRecord.Name = "buttonAddRecord";
+            this.buttonAddRecord.Size = new System.Drawing.Size(100, 30);
+            this.buttonAddRecord.TabIndex = 4;
+            this.buttonAddRecord.Text = "新增紀錄";
+            this.buttonAddRecord.UseVisualStyleBackColor = true;
+            // 
+            // buttonExportCsv
+            // 
+            this.buttonExportCsv.Location = new System.Drawing.Point(230, 150);
+            this.buttonExportCsv.Name = "buttonExportCsv";
+            this.buttonExportCsv.Size = new System.Drawing.Size(100, 30);
+            this.buttonExportCsv.TabIndex = 5;
+            this.buttonExportCsv.Text = "匯出 CSV";
+            this.buttonExportCsv.UseVisualStyleBackColor = true;
+            // 
+            // buttonReport
+            // 
+            this.buttonReport.Location = new System.Drawing.Point(340, 150);
+            this.buttonReport.Name = "buttonReport";
+            this.buttonReport.Size = new System.Drawing.Size(100, 30);
+            this.buttonReport.TabIndex = 6;
+            this.buttonReport.Text = "報表";
+            this.buttonReport.UseVisualStyleBackColor = true;
+            // 
+            // buttonClear
+            // 
+            this.buttonClear.Location = new System.Drawing.Point(450, 150);
+            this.buttonClear.Name = "buttonClear";
+            this.buttonClear.Size = new System.Drawing.Size(100, 30);
+            this.buttonClear.TabIndex = 7;
+            this.buttonClear.Text = "清除";
+            this.buttonClear.UseVisualStyleBackColor = true;
+            // 
+            // buttonSaveToFile
+            // 
+            this.buttonSaveToFile.Location = new System.Drawing.Point(560, 150);
+            this.buttonSaveToFile.Name = "buttonSaveToFile";
+            this.buttonSaveToFile.Size = new System.Drawing.Size(150, 30);
+            this.buttonSaveToFile.TabIndex = 8;
+            this.buttonSaveToFile.Text = "儲存詳細報表";
+            this.buttonSaveToFile.UseVisualStyleBackColor = true;
+            // 
+            // labelServiceFee
+            // 
+            this.labelServiceFee.AutoSize = true;
+            this.labelServiceFee.Location = new System.Drawing.Point(230, 90);
+            this.labelServiceFee.Name = "labelServiceFee";
+            this.labelServiceFee.Size = new System.Drawing.Size(79, 15);
+            this.labelServiceFee.TabIndex = 9;
+            this.labelServiceFee.Text = "服務費: -";
+            // 
+            // labelPartsCost
+            // 
+            this.labelPartsCost.AutoSize = true;
+            this.labelPartsCost.Location = new System.Drawing.Point(230, 110);
+            this.labelPartsCost.Name = "labelPartsCost";
+            this.labelPartsCost.Size = new System.Drawing.Size(73, 15);
+            this.labelPartsCost.TabIndex = 10;
+            this.labelPartsCost.Text = "零件費: -";
+            // 
+            // labelPartsTax
+            // 
+            this.labelPartsTax.AutoSize = true;
+            this.labelPartsTax.Location = new System.Drawing.Point(230, 130);
+            this.labelPartsTax.Name = "labelPartsTax";
+            this.labelPartsTax.Size = new System.Drawing.Size(64, 15);
+            this.labelPartsTax.TabIndex = 11;
+            this.labelPartsTax.Text = "零件稅: -";
+            // 
+            // labelLaborFee
+            // 
+            this.labelLaborFee.AutoSize = true;
+            this.labelLaborFee.Location = new System.Drawing.Point(230, 150);
+            this.labelLaborFee.Name = "labelLaborFee";
+            this.labelLaborFee.Size = new System.Drawing.Size(69, 15);
+            this.labelLaborFee.TabIndex = 12;
+            this.labelLaborFee.Text = "工資: -";
+            // 
+            // labelTotal
+            // 
+            this.labelTotal.AutoSize = true;
+            this.labelTotal.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.labelTotal.Location = new System.Drawing.Point(12, 190);
+            this.labelTotal.Name = "labelTotal";
+            this.labelTotal.Size = new System.Drawing.Size(0, 21);
+            this.labelTotal.TabIndex = 13;
+            // 
+            // dataGridViewRecords
+            // 
+            this.dataGridViewRecords.AllowUserToAddRows = false;
+            this.dataGridViewRecords.AllowUserToDeleteRows = false;
+            this.dataGridViewRecords.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewRecords.Location = new System.Drawing.Point(12, 220);
+            this.dataGridViewRecords.Name = "dataGridViewRecords";
+            this.dataGridViewRecords.RowTemplate.Height = 25;
+            this.dataGridViewRecords.Size = new System.Drawing.Size(760, 220);
+            this.dataGridViewRecords.TabIndex = 14;
+            // 
+            // dateTimePickerDate
+            // 
+            this.dateTimePickerDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dateTimePickerDate.CustomFormat = "yyyy-MM-dd HH:mm";
+            this.dateTimePickerDate.Location = new System.Drawing.Point(360, 12);
+            this.dateTimePickerDate.Name = "dateTimePickerDate";
+            this.dateTimePickerDate.Size = new System.Drawing.Size(200, 23);
+            this.dateTimePickerDate.TabIndex = 15;
+            // 
+            // Form1
+            // 
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.dateTimePickerDate);
+            this.Controls.Add(this.dataGridViewRecords);
+            this.Controls.Add(this.labelTotal);
+            this.Controls.Add(this.labelLaborFee);
+            this.Controls.Add(this.labelPartsTax);
+            this.Controls.Add(this.labelPartsCost);
+            this.Controls.Add(this.labelServiceFee);
+            this.Controls.Add(this.buttonSaveToFile);
+            this.Controls.Add(this.buttonClear);
+            this.Controls.Add(this.buttonReport);
+            this.Controls.Add(this.buttonExportCsv);
+            this.Controls.Add(this.buttonAddRecord);
+            this.Controls.Add(this.buttonCalculate);
+            this.Controls.Add(this.numericUpDownLaborHours);
+            this.Controls.Add(this.numericUpDownParts);
+            this.Controls.Add(this.checkedListBoxServices);
+            this.Name = "Form1";
+            this.Text = "車輛維修費用管理系統";
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownParts)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLaborHours)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRecords)).EndInit();
+            this.ResumeLayout(false);
+            this.PerformLayout();
+        }
+
+        #endregion
+    }
+}

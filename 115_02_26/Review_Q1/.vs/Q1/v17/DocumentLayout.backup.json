@@ -1,0 +1,102 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\m303\\Desktop\\114_2_C_Sharp\\115_02_26\\Q1\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{FCB2B912-BC4F-4FB6-8499-E41CFBB4C0E7}|Q1\\Q1.csproj|c:\\users\\m303\\desktop\\114_2_c_sharp\\115_02_26\\q1\\q1\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{FCB2B912-BC4F-4FB6-8499-E41CFBB4C0E7}|Q1\\Q1.csproj|solutionrelative:q1\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FCB2B912-BC4F-4FB6-8499-E41CFBB4C0E7}|Q1\\Q1.csproj|c:\\users\\m303\\desktop\\114_2_c_sharp\\115_02_26\\q1\\q1\\form1.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FCB2B912-BC4F-4FB6-8499-E41CFBB4C0E7}|Q1\\Q1.csproj|solutionrelative:q1\\form1.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FCB2B912-BC4F-4FB6-8499-E41CFBB4C0E7}|Q1\\Q1.csproj|c:\\users\\m303\\desktop\\114_2_c_sharp\\115_02_26\\q1\\q1\\properties\\resources.resx||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{FCB2B912-BC4F-4FB6-8499-E41CFBB4C0E7}|Q1\\Q1.csproj|solutionrelative:q1\\properties\\resources.resx||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FCB2B912-BC4F-4FB6-8499-E41CFBB4C0E7}|Q1\\Q1.csproj|c:\\users\\m303\\desktop\\114_2_c_sharp\\115_02_26\\q1\\q1\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FCB2B912-BC4F-4FB6-8499-E41CFBB4C0E7}|Q1\\Q1.csproj|solutionrelative:q1\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FCB2B912-BC4F-4FB6-8499-E41CFBB4C0E7}|Q1\\Q1.csproj|c:\\users\\m303\\desktop\\114_2_c_sharp\\115_02_26\\q1\\q1\\properties\\resources.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FCB2B912-BC4F-4FB6-8499-E41CFBB4C0E7}|Q1\\Q1.csproj|solutionrelative:q1\\properties\\resources.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 117,
+          "SelectedChildIndex": 4,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Form1.cs",
+              "DocumentMoniker": "C:\\Users\\m303\\Desktop\\114_2_C_Sharp\\115_02_26\\Q1\\Q1\\Form1.cs",
+              "RelativeDocumentMoniker": "Q1\\Form1.cs",
+              "ToolTip": "C:\\Users\\m303\\Desktop\\114_2_C_Sharp\\115_02_26\\Q1\\Q1\\Form1.cs",
+              "RelativeToolTip": "Q1\\Form1.cs",
+              "ViewState": "AgIAAFUAAAAAAAAAAAAgwBsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-24T02:58:04.304Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Resources.Designer.cs",
+              "DocumentMoniker": "C:\\Users\\m303\\Desktop\\114_2_C_Sharp\\115_02_26\\Q1\\Q1\\Properties\\Resources.Designer.cs",
+              "RelativeDocumentMoniker": "Q1\\Properties\\Resources.Designer.cs",
+              "ToolTip": "C:\\Users\\m303\\Desktop\\114_2_C_Sharp\\115_02_26\\Q1\\Q1\\Properties\\Resources.Designer.cs",
+              "RelativeToolTip": "Q1\\Properties\\Resources.Designer.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-24T04:23:51.834Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Resources.resx",
+              "DocumentMoniker": "C:\\Users\\m303\\Desktop\\114_2_C_Sharp\\115_02_26\\Q1\\Q1\\Properties\\Resources.resx",
+              "RelativeDocumentMoniker": "Q1\\Properties\\Resources.resx",
+              "ToolTip": "C:\\Users\\m303\\Desktop\\114_2_C_Sharp\\115_02_26\\Q1\\Q1\\Properties\\Resources.resx",
+              "RelativeToolTip": "Q1\\Properties\\Resources.resx",
+              "ViewState": "AgIAAGsAAAAAAAAAAAAmwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001005|",
+              "WhenOpened": "2025-12-24T03:12:04.035Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Form1.Designer.cs",
+              "DocumentMoniker": "C:\\Users\\m303\\Desktop\\114_2_C_Sharp\\115_02_26\\Q1\\Q1\\Form1.Designer.cs",
+              "RelativeDocumentMoniker": "Q1\\Form1.Designer.cs",
+              "ToolTip": "C:\\Users\\m303\\Desktop\\114_2_C_Sharp\\115_02_26\\Q1\\Q1\\Form1.Designer.cs",
+              "RelativeToolTip": "Q1\\Form1.Designer.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-24T02:57:42.49Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Form1.cs [\u8A2D\u8A08]",
+              "DocumentMoniker": "C:\\Users\\m303\\Desktop\\114_2_C_Sharp\\115_02_26\\Q1\\Q1\\Form1.cs",
+              "RelativeDocumentMoniker": "Q1\\Form1.cs",
+              "ToolTip": "C:\\Users\\m303\\Desktop\\114_2_C_Sharp\\115_02_26\\Q1\\Q1\\Form1.cs [\u8A2D\u8A08]",
+              "RelativeToolTip": "Q1\\Form1.cs [\u8A2D\u8A08]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-24T02:55:40.515Z",
+              "EditorCaption": " [\u8A2D\u8A08]"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

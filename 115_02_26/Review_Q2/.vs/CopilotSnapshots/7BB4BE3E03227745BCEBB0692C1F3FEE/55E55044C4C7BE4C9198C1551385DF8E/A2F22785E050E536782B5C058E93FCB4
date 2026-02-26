@@ -1,0 +1,176 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
+
+namespace Q2
+{
+    public partial class Form1 : Form
+    {
+        BindingList<ServiceRecord> records = new BindingList<ServiceRecord>();
+
+        public Form1()
+        {
+            InitializeComponent();
+
+            InitControls();
+
+            this.FormClosing += Form1_FormClosing;
+        }
+
+        private void InitControls()
+        {
+            // nothing to populate for checkboxes here
+
+            numericUpDownParts = null; // ensure old controls are not used
+
+            buttonCalculate.Click += CalculateButton_Click;
+            buttonClearShort.Click += ClearButton_Click;
+            buttonExit.Click += ExitButton_Click;
+
+            // initialize textboxes
+            textBoxServiceLabor.Text = string.Empty;
+            textBoxParts.Text = string.Empty;
+            textBoxTax.Text = string.Empty;
+            textBoxTotal.Text = string.Empty;
+        }
+
+        private IEnumerable<ServiceItem> GetSelectedServiceItems()
+        {
+            var list = new List<ServiceItem>();
+            if (chkOilChange.Checked) list.Add(new ServiceItem(ServiceType.OilChange));
+            if (chkLubrication.Checked) list.Add(new ServiceItem(ServiceType.Lubrication));
+            if (chkRadiatorCleaning.Checked) list.Add(new ServiceItem(ServiceType.RadiatorCleaning));
+            if (chkTransmissionCleaning.Checked) list.Add(new ServiceItem(ServiceType.TransmissionCleaning));
+            if (chkInspection.Checked) list.Add(new ServiceItem(ServiceType.Inspection));
+            if (chkMufflerReplacement.Checked) list.Add(new ServiceItem(ServiceType.MufflerReplacement));
+            if (chkTireRotation.Checked) list.Add(new ServiceItem(ServiceType.TireRotation));
+            return list;
+        }
+
+        private void CalculateButton_Click(object? sender, EventArgs e)
+        {
+            // safe parse parts and hours
+            if (!decimal.TryParse(textBoxPartsInput.Text.Trim(), out var parts))
+                parts = 0m;
+            if (parts < 0) parts = 0m;
+
+            if (!decimal.TryParse(textBoxHoursInput.Text.Trim(), out var hours))
+                hours = 0m;
+            if (hours < 0) hours = 0m;
+
+            var selected = GetSelectedServiceItems().ToList();
+            decimal serviceFee = selected.Sum(s => s.Price);
+            decimal laborFee = ServiceCalculator.CalculateLabor(hours);
+            decimal partsTax = ServiceCalculator.CalculatePartsTax(parts);
+            decimal total = serviceFee + laborFee + parts + partsTax;
+
+            textBoxServiceLabor.Text = (serviceFee + laborFee).ToString("C");
+            textBoxParts.Text = parts.ToString("C");
+            textBoxTax.Text = partsTax.ToString("C");
+            textBoxTotal.Text = total.ToString("C");
+        }
+
+        private void ClearButton_Click(object? sender, EventArgs e)
+        {
+            chkOilChange.Checked = false;
+            chkLubrication.Checked = false;
+            chkRadiatorCleaning.Checked = false;
+            chkTransmissionCleaning.Checked = false;
+            chkInspection.Checked = false;
+            chkMufflerReplacement.Checked = false;
+            chkTireRotation.Checked = false;
+
+            textBoxPartsInput.Text = string.Empty;
+            textBoxHoursInput.Text = string.Empty;
+
+            textBoxServiceLabor.Text = string.Empty;
+            textBoxParts.Text = string.Empty;
+            textBoxTax.Text = string.Empty;
+            textBoxTotal.Text = string.Empty;
+        }
+
+        private void ExitButton_Click(object? sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        // The rest of methods (reporting, saving) are unchanged but made internal no-ops for this layout
+
+        private string EscapeCsv(string s)
+        {
+            if (s.Contains(",") || s.Contains("\""))
+            {
+                return "\"" + s.Replace("\"", "\"\"") + "\"";
+            }
+            return s;
+        }
+
+        private string BuildDetailedReport(ServiceRecord rec)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("車輛維修詳細報表");
+            sb.AppendLine($"日期: {rec.Date:yyyy-MM-dd HH:mm}");
+            sb.AppendLine();
+            sb.AppendLine("服務項目:");
+            foreach (var s in rec.ServicesDescription.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries))
+            {
+                var name = s.Trim();
+                if (ServiceCalculator.TryGetServiceTypeByDisplayName(name, out var st))
+                {
+                    sb.AppendLine($" - {name}: {ServiceCalculator.GetBasePrice(st):C}");
+                }
+                else
+                {
+                    sb.AppendLine($" - {name}");
+                }
+            }
+            sb.AppendLine();
+            sb.AppendLine($"服務費小計: {rec.ServiceFee:C}");
+            sb.AppendLine($"工資: {rec.LaborHours} 小時 @ {rec.LaborRate:C}/小時 = {rec.LaborFee:C}");
+            sb.AppendLine($"零件費: {rec.PartsCost:C}");
+            sb.AppendLine($"零件稅 (6%): {rec.PartsTax:C}");
+            sb.AppendLine();
+            sb.AppendLine($"計算過程:");
+            sb.AppendLine($"服務與工資總額 = 服務費 + 工資 = {rec.ServiceFee:C} + {rec.LaborFee:C} = {(rec.ServiceFee + rec.LaborFee):C}");
+            sb.AppendLine($"總費用 = 服務與工資總額 + 零件費 + 零件稅 = {(rec.ServiceFee + rec.LaborFee):C} + {rec.PartsCost:C} + {rec.PartsTax:C} = {rec.TotalCost:C}");
+            sb.AppendLine();
+            sb.AppendLine("--- 報表結束 ---");
+            return sb.ToString();
+        }
+
+        private void Form1_FormClosing(object? sender, FormClosingEventArgs e)
+        {
+            // keep existing save prompt behavior
+            if (records.Count == 0) return;
+
+            var result = MessageBox.Show("有儲存的紀錄，是否在離開前儲存完整報表？\n(是 = 儲存, 否 = 直接離開, 取消 = 返回程式)", "關閉前儲存", MessageBoxButtons.YesNoCancel);
+            if (result == DialogResult.Cancel)
+            {
+                e.Cancel = true;
+                return;
+            }
+            if (result == DialogResult.Yes)
+            {
+                using var sfd = new SaveFileDialog();
+                sfd.Filter = "文字檔|*.txt|所有檔案|*.*";
+                sfd.FileName = "ServiceRecords_Summary.txt";
+                if (sfd.ShowDialog() == DialogResult.OK)
+                {
+                    var sb = new StringBuilder();
+                    sb.AppendLine("車輛維修紀錄匯總");
+                    sb.AppendLine($"匯出時間: {DateTime.Now:yyyy-MM-dd HH:mm}");
+                    sb.AppendLine();
+                    foreach (var r in records)
+                    {
+                        sb.AppendLine(BuildDetailedReport(r));
+                        sb.AppendLine();
+                    }
+                    System.IO.File.WriteAllText(sfd.FileName, sb.ToString(), Encoding.UTF8);
+                }
+            }
+        }
+    }
+}

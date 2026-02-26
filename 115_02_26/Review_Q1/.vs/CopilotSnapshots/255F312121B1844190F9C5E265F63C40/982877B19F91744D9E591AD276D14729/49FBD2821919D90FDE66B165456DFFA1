@@ -1,0 +1,181 @@
+﻿namespace Q1
+{
+    partial class Form1
+    {
+        /// <summary>
+        ///  Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        // semantic control names
+        private System.Windows.Forms.Button stoneButton;
+        private System.Windows.Forms.Button paperButton;
+        private System.Windows.Forms.Button scissorsButton;
+        private System.Windows.Forms.Label playerScoreLabel;
+        private System.Windows.Forms.Label computerScoreLabel;
+        private System.Windows.Forms.Label resultLabel;
+        private System.Windows.Forms.Button endGameButton;
+        private System.Windows.Forms.Button resetButton;
+        private System.Windows.Forms.PictureBox playerPictureBox;
+        private System.Windows.Forms.PictureBox computerPictureBox;
+
+        /// <summary>
+        ///  Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        ///  Required method for Designer support - do not modify
+        ///  the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            stoneButton = new Button();
+            paperButton = new Button();
+            scissorsButton = new Button();
+            playerScoreLabel = new Label();
+            computerScoreLabel = new Label();
+            resultLabel = new Label();
+            endGameButton = new Button();
+            resetButton = new Button();
+            playerPictureBox = new PictureBox();
+            computerPictureBox = new PictureBox();
+            ((System.ComponentModel.ISupportInitialize)playerPictureBox).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)computerPictureBox).BeginInit();
+            SuspendLayout();
+            // 
+            // stoneButton
+            // 
+            stoneButton.Location = new Point(30, 220);
+            stoneButton.Name = "stoneButton";
+            stoneButton.Size = new Size(120, 40);
+            stoneButton.TabIndex = 0;
+            stoneButton.Text = "石頭";
+            stoneButton.UseVisualStyleBackColor = true;
+            stoneButton.Click += stoneButton_Click;
+            // 
+            // paperButton
+            // 
+            paperButton.Location = new Point(160, 220);
+            paperButton.Name = "paperButton";
+            paperButton.Size = new Size(120, 40);
+            paperButton.TabIndex = 1;
+            paperButton.Text = "布";
+            paperButton.UseVisualStyleBackColor = true;
+            paperButton.Click += paperButton_Click;
+            // 
+            // scissorsButton
+            // 
+            scissorsButton.Location = new Point(290, 220);
+            scissorsButton.Name = "scissorsButton";
+            scissorsButton.Size = new Size(120, 40);
+            scissorsButton.TabIndex = 2;
+            scissorsButton.Text = "剪刀";
+            scissorsButton.UseVisualStyleBackColor = true;
+            scissorsButton.Click += scissorsButton_Click;
+            // 
+            // playerScoreLabel
+            // 
+            playerScoreLabel.AutoSize = true;
+            playerScoreLabel.Location = new Point(30, 190);
+            playerScoreLabel.Name = "playerScoreLabel";
+            playerScoreLabel.Size = new Size(101, 23);
+            playerScoreLabel.TabIndex = 5;
+            playerScoreLabel.Text = "玩家勝場: 0";
+            // 
+            // computerScoreLabel
+            // 
+            computerScoreLabel.AutoSize = true;
+            computerScoreLabel.Location = new Point(240, 190);
+            computerScoreLabel.Name = "computerScoreLabel";
+            computerScoreLabel.Size = new Size(101, 23);
+            computerScoreLabel.TabIndex = 6;
+            computerScoreLabel.Text = "電腦勝場: 0";
+            // 
+            // resultLabel
+            // 
+            resultLabel.AutoSize = true;
+            resultLabel.Font = new Font("Segoe UI", 10F);
+            resultLabel.Location = new Point(30, 270);
+            resultLabel.Name = "resultLabel";
+            resultLabel.Size = new Size(104, 28);
+            resultLabel.TabIndex = 7;
+            resultLabel.Text = "準備開始...";
+            // 
+            // endGameButton
+            // 
+            endGameButton.Location = new Point(30, 310);
+            endGameButton.Name = "endGameButton";
+            endGameButton.Size = new Size(120, 35);
+            endGameButton.TabIndex = 8;
+            endGameButton.Text = "結束遊戲";
+            endGameButton.UseVisualStyleBackColor = true;
+            endGameButton.Click += endGameButton_Click;
+            // 
+            // resetButton
+            // 
+            resetButton.Location = new Point(160, 310);
+            resetButton.Name = "resetButton";
+            resetButton.Size = new Size(120, 35);
+            resetButton.TabIndex = 9;
+            resetButton.Text = "重置";
+            resetButton.UseVisualStyleBackColor = true;
+            resetButton.Click += resetButton_Click;
+            // 
+            // playerPictureBox
+            // 
+            playerPictureBox.BorderStyle = BorderStyle.FixedSingle;
+            playerPictureBox.Location = new Point(30, 20);
+            playerPictureBox.Name = "playerPictureBox";
+            playerPictureBox.Size = new Size(170, 170);
+            playerPictureBox.SizeMode = PictureBoxSizeMode.CenterImage;
+            playerPictureBox.TabIndex = 3;
+            playerPictureBox.TabStop = false;
+            // 
+            // computerPictureBox
+            // 
+            computerPictureBox.BorderStyle = BorderStyle.FixedSingle;
+            computerPictureBox.Location = new Point(240, 20);
+            computerPictureBox.Name = "computerPictureBox";
+            computerPictureBox.Size = new Size(170, 170);
+            computerPictureBox.SizeMode = PictureBoxSizeMode.CenterImage;
+            computerPictureBox.TabIndex = 4;
+            computerPictureBox.TabStop = false;
+            computerPictureBox.Click += computerPictureBox_Click;
+            // 
+            // Form1
+            // 
+            AutoScaleDimensions = new SizeF(11F, 23F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(450, 360);
+            Controls.Add(resetButton);
+            Controls.Add(endGameButton);
+            Controls.Add(resultLabel);
+            Controls.Add(computerScoreLabel);
+            Controls.Add(playerScoreLabel);
+            Controls.Add(computerPictureBox);
+            Controls.Add(playerPictureBox);
+            Controls.Add(scissorsButton);
+            Controls.Add(paperButton);
+            Controls.Add(stoneButton);
+            Name = "Form1";
+            Text = "猜拳遊戲";
+            ((System.ComponentModel.ISupportInitialize)playerPictureBox).EndInit();
+            ((System.ComponentModel.ISupportInitialize)computerPictureBox).EndInit();
+            ResumeLayout(false);
+            PerformLayout();
+        }
+
+        #endregion
+    }
+}

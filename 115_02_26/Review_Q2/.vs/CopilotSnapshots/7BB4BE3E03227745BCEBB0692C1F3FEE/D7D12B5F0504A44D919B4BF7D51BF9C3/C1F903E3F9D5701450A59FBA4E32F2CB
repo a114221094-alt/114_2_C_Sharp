@@ -1,0 +1,54 @@
+﻿using System;
+
+namespace Q2
+{
+    public enum ServiceType
+    {
+        OilChange,
+        TireReplacement,
+        BrakeRepair,
+        EngineTune,
+        BatteryReplacement,
+        Inspection
+    }
+
+    public class ServiceRecord
+    {
+        public DateTime Date { get; set; }
+        public ServiceType Service { get; set; }
+        public decimal BasePrice { get; set; }
+        public decimal PartsCost { get; set; }
+        public decimal LaborHours { get; set; }
+        public decimal LaborRate { get; set; }
+        public decimal TotalCost { get; set; }
+
+        public ServiceRecord()
+        {
+            Date = DateTime.Now;
+        }
+    }
+
+    public static class ServiceCalculator
+    {
+        // base prices for services
+        public static decimal GetBasePrice(ServiceType type)
+        {
+            return type switch
+            {
+                ServiceType.OilChange => 800m,
+                ServiceType.TireReplacement => 2000m,
+                ServiceType.BrakeRepair => 3000m,
+                ServiceType.EngineTune => 4000m,
+                ServiceType.BatteryReplacement => 1500m,
+                ServiceType.Inspection => 500m,
+                _ => 0m,
+            };
+        }
+
+        public static decimal CalculateTotal(decimal basePrice, decimal partsCost, decimal laborHours, decimal laborRate)
+        {
+            var labor = laborHours * laborRate;
+            return basePrice + partsCost + labor;
+        }
+    }
+}

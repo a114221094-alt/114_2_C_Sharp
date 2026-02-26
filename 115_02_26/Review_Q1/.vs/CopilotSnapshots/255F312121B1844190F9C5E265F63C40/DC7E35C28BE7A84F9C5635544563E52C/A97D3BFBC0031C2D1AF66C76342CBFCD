@@ -1,0 +1,91 @@
+﻿using System;
+using System.Windows.Forms;
+
+namespace Q1
+{
+    public partial class Form1 : Form
+    {
+        private int playerScore = 0;
+        private int computerScore = 0;
+        private Random rng = new Random();
+
+        public Form1()
+        {
+            InitializeComponent();
+            UpdateScores();
+        }
+
+        private void btnRock_Click(object sender, EventArgs e)
+        {
+            PlayRound(Move.Rock);
+        }
+
+        private void btnPaper_Click(object sender, EventArgs e)
+        {
+            PlayRound(Move.Paper);
+        }
+
+        private void btnScissors_Click(object sender, EventArgs e)
+        {
+            PlayRound(Move.Scissors);
+        }
+
+        private void btnEndGame_Click(object sender, EventArgs e)
+        {
+            string message = $"遊戲結束\n玩家勝場: {playerScore}\n電腦勝場: {computerScore}";
+            MessageBox.Show(message, "統計結果", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void btnReset_Click(object sender, EventArgs e)
+        {
+            playerScore = 0;
+            computerScore = 0;
+            lblResult.Text = "已重置，開始新遊戲";
+            UpdateScores();
+        }
+
+        private enum Move { Rock, Paper, Scissors }
+
+        private void PlayRound(Move playerMove)
+        {
+            Move computerMove = (Move)rng.Next(0, 3);
+            string compStr = computerMove == Move.Rock ? "石頭" : computerMove == Move.Paper ? "布" : "剪刀";
+            string playerStr = playerMove == Move.Rock ? "石頭" : playerMove == Move.Paper ? "布" : "剪刀";
+
+            int result = DetermineWinner(playerMove, computerMove);
+            if (result == 1)
+            {
+                playerScore++;
+                lblResult.Text = $"你出 {playerStr}，電腦出 {compStr}。你贏了！";
+            }
+            else if (result == -1)
+            {
+                computerScore++;
+                lblResult.Text = $"你出 {playerStr}，電腦出 {compStr}。你輸了。";
+            }
+            else
+            {
+                lblResult.Text = $"你出 {playerStr}，電腦出 {compStr}。平手。";
+            }
+
+            UpdateScores();
+        }
+
+        // returns 1 if player wins, -1 if computer wins, 0 for tie
+        private int DetermineWinner(Move p, Move c)
+        {
+            if (p == c) return 0;
+            if ((p == Move.Rock && c == Move.Scissors) ||
+                (p == Move.Paper && c == Move.Rock) ||
+                (p == Move.Scissors && c == Move.Paper))
+                return 1;
+            return -1;
+        }
+
+        private void UpdateScores()
+        {
+            lblPlayerScore.Text = $"玩家勝場: {playerScore}";
+            lblComputerScore.Text = $"電腦勝場: {computerScore}";
+        }
+    }
+}

@@ -1,0 +1,148 @@
+﻿namespace Q1
+{
+    partial class Form1
+    {
+        /// <summary>
+        ///  Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+        private System.Windows.Forms.Button btnRock;
+        private System.Windows.Forms.Button btnPaper;
+        private System.Windows.Forms.Button btnScissors;
+        private System.Windows.Forms.Label lblPlayerScore;
+        private System.Windows.Forms.Label lblComputerScore;
+        private System.Windows.Forms.Label lblResult;
+        private System.Windows.Forms.Button btnEndGame;
+        private System.Windows.Forms.Button btnReset;
+
+        /// <summary>
+        ///  Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        ///  Required method for Designer support - do not modify
+        ///  the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            this.components = new System.ComponentModel.Container();
+            this.btnRock = new System.Windows.Forms.Button();
+            this.btnPaper = new System.Windows.Forms.Button();
+            this.btnScissors = new System.Windows.Forms.Button();
+            this.lblPlayerScore = new System.Windows.Forms.Label();
+            this.lblComputerScore = new System.Windows.Forms.Label();
+            this.lblResult = new System.Windows.Forms.Label();
+            this.btnEndGame = new System.Windows.Forms.Button();
+            this.btnReset = new System.Windows.Forms.Button();
+            this.SuspendLayout();
+            // 
+            // btnRock
+            // 
+            this.btnRock.Location = new System.Drawing.Point(30, 30);
+            this.btnRock.Name = "btnRock";
+            this.btnRock.Size = new System.Drawing.Size(120, 40);
+            this.btnRock.TabIndex = 0;
+            this.btnRock.Text = "石頭";
+            this.btnRock.UseVisualStyleBackColor = true;
+            this.btnRock.Click += new System.EventHandler(this.btnRock_Click);
+            // 
+            // btnPaper
+            // 
+            this.btnPaper.Location = new System.Drawing.Point(160, 30);
+            this.btnPaper.Name = "btnPaper";
+            this.btnPaper.Size = new System.Drawing.Size(120, 40);
+            this.btnPaper.TabIndex = 1;
+            this.btnPaper.Text = "布";
+            this.btnPaper.UseVisualStyleBackColor = true;
+            this.btnPaper.Click += new System.EventHandler(this.btnPaper_Click);
+            // 
+            // btnScissors
+            // 
+            this.btnScissors.Location = new System.Drawing.Point(290, 30);
+            this.btnScissors.Name = "btnScissors";
+            this.btnScissors.Size = new System.Drawing.Size(120, 40);
+            this.btnScissors.TabIndex = 2;
+            this.btnScissors.Text = "剪刀";
+            this.btnScissors.UseVisualStyleBackColor = true;
+            this.btnScissors.Click += new System.EventHandler(this.btnScissors_Click);
+            // 
+            // lblPlayerScore
+            // 
+            this.lblPlayerScore.AutoSize = true;
+            this.lblPlayerScore.Location = new System.Drawing.Point(30, 90);
+            this.lblPlayerScore.Name = "lblPlayerScore";
+            this.lblPlayerScore.Size = new System.Drawing.Size(110, 20);
+            this.lblPlayerScore.TabIndex = 3;
+            this.lblPlayerScore.Text = "玩家勝場: 0";
+            // 
+            // lblComputerScore
+            // 
+            this.lblComputerScore.AutoSize = true;
+            this.lblComputerScore.Location = new System.Drawing.Point(30, 120);
+            this.lblComputerScore.Name = "lblComputerScore";
+            this.lblComputerScore.Size = new System.Drawing.Size(110, 20);
+            this.lblComputerScore.TabIndex = 4;
+            this.lblComputerScore.Text = "電腦勝場: 0";
+            // 
+            // lblResult
+            // 
+            this.lblResult.AutoSize = true;
+            this.lblResult.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblResult.Location = new System.Drawing.Point(30, 160);
+            this.lblResult.Name = "lblResult";
+            this.lblResult.Size = new System.Drawing.Size(54, 23);
+            this.lblResult.TabIndex = 5;
+            this.lblResult.Text = "準備開始...";
+            // 
+            // btnEndGame
+            // 
+            this.btnEndGame.Location = new System.Drawing.Point(30, 210);
+            this.btnEndGame.Name = "btnEndGame";
+            this.btnEndGame.Size = new System.Drawing.Size(120, 35);
+            this.btnEndGame.TabIndex = 6;
+            this.btnEndGame.Text = "結束遊戲";
+            this.btnEndGame.UseVisualStyleBackColor = true;
+            this.btnEndGame.Click += new System.EventHandler(this.btnEndGame_Click);
+            // 
+            // btnReset
+            // 
+            this.btnReset.Location = new System.Drawing.Point(160, 210);
+            this.btnReset.Name = "btnReset";
+            this.btnReset.Size = new System.Drawing.Size(120, 35);
+            this.btnReset.TabIndex = 7;
+            this.btnReset.Text = "重置";
+            this.btnReset.UseVisualStyleBackColor = true;
+            this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
+            // 
+            // Form1
+            // 
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(450, 280);
+            this.Controls.Add(this.btnReset);
+            this.Controls.Add(this.btnEndGame);
+            this.Controls.Add(this.lblResult);
+            this.Controls.Add(this.lblComputerScore);
+            this.Controls.Add(this.lblPlayerScore);
+            this.Controls.Add(this.btnScissors);
+            this.Controls.Add(this.btnPaper);
+            this.Controls.Add(this.btnRock);
+            this.Name = "Form1";
+            this.Text = "猜拳遊戲";
+            this.ResumeLayout(false);
+            this.PerformLayout();
+        }
+
+        #endregion
+    }
+}

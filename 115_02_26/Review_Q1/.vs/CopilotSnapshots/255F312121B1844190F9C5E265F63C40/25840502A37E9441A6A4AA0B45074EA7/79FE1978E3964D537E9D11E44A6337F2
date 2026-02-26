@@ -1,0 +1,281 @@
+﻿using System;
+using System.Drawing;
+using System.IO;
+using System.Windows.Forms;
+
+namespace Q1
+{
+    public partial class Form1 : Form
+    {
+        private int playerScore = 0;
+        private int computerScore = 0;
+        private Random rng = new Random();
+        private Move currentComputerChoice;
+
+        // folder provided by user containing images (fallback)
+        private readonly string imagesFolder = @"C:\Users\m303\Downloads\114_1_C_Sharp_Tutorial-main\Images\Rock Paper Scissors";
+
+        public Form1()
+        {
+            InitializeComponent();
+            // initial UI setup moved to Form1_Load
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            // ensure picture boxes start empty and labels initialized
+            playerPictureBox.Image = null;
+            computerPictureBox.Image = null;
+            resultLabel.Text = "準備開始...";
+            UpdateScores();
+        }
+
+        private void stoneButton_Click(object sender, EventArgs e)
+        {
+            PlayRound(Move.Rock);
+        }
+
+        private void paperButton_Click(object sender, EventArgs e)
+        {
+            PlayRound(Move.Paper);
+        }
+
+        private void scissorsButton_Click(object sender, EventArgs e)
+        {
+            PlayRound(Move.Scissors);
+        }
+
+        private void endGameButton_Click(object sender, EventArgs e)
+        {
+            string message = $"遊戲統計:\n玩家勝場: {playerScore}\n電腦勝場: {computerScore}\n\n按確定關閉程式。";
+            var dr = MessageBox.Show(message, "統計結果", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
+            if (dr == DialogResult.OK)
+            {
+                Application.Exit();
+            }
+        }
+
+        private void resetButton_Click(object sender, EventArgs e)
+        {
+            playerScore = 0;
+            computerScore = 0;
+            resultLabel.Text = "已重置，開始新遊戲";
+            playerPictureBox.Image = null;
+            computerPictureBox.Image = null;
+            UpdateScores();
+        }
+
+        private enum Move { Rock, Paper, Scissors }
+
+        // Main round flow uses modular methods
+        private void PlayRound(Move playerMove)
+        {
+            // computer choice
+            getCompChoice();
+
+            // show images
+            showPlayerImage(playerMove);
+            showComputerImage(currentComputerChoice);
+
+            // determine winner and update UI/scores
+            showWinner(playerMove, currentComputerChoice);
+
+            UpdateScores();
+        }
+
+        // generate computer choice and store in currentComputerChoice
+        private void getCompChoice()
+        {
+            currentComputerChoice = (Move)rng.Next(0, 3);
+        }
+
+        // display computer image; attempts project Images folder, then resources, then external folder, otherwise draw fallback
+        private void showComputerImage(Move m)
+        {
+            string key = GetMoveKey(m);
+            Image img = TryLoadProjectImage(key, "computer")
+                        ?? TryLoadResourceImage($"comp_{key}")
+                        ?? TryLoadImageFromFolder($"comp_{key}")
+                        ?? TryLoadImageFromFolder(key);
+            computerPictureBox.Image = img ?? GetImageForMove(m);
+        }
+
+        // display player image; attempts project Images folder, then resources, then external folder, otherwise draw fallback
+        private void showPlayerImage(Move m)
+        {
+            string key = GetMoveKey(m);
+            Image img = TryLoadProjectImage(key, "player")
+                        ?? TryLoadResourceImage($"player_{key}")
+                        ?? TryLoadImageFromFolder($"player_{key}")
+                        ?? TryLoadImageFromFolder(key);
+            playerPictureBox.Image = img ?? GetImageForMove(m);
+        }
+
+        // try to load image from project's Images folder (relative to app base)
+        private Image TryLoadProjectImage(string key, string side)
+        {
+            try
+            {
+                string mapped = MapKeyToFilename(key); // rock->stone, scissors->scissor
+                string fileName = $"{mapped}_{side}.png"; // e.g. stone_player.png
+                string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+                string imagesDir = Path.Combine(baseDir, "Images");
+                string full = Path.Combine(imagesDir, fileName);
+                if (File.Exists(full))
+                {
+                    using (var tmp = Image.FromFile(full))
+                    {
+                        return new Bitmap(tmp);
+                    }
+                }
+            }
+            catch
+            {
+                // ignore
+            }
+            return null;
+        }
+
+        // mapping so code uses 'rock','paper','scissors' but filenames use stone/paper/scissor
+        private string MapKeyToFilename(string key)
+        {
+            return key == "rock" ? "stone" : key == "scissors" ? "scissor" : key; // paper stays paper
+        }
+
+        // compare moves, update scores and show result text
+        private void showWinner(Move playerMove, Move computerMove)
+        {
+            string compStr = GetMoveName(computerMove);
+            string playerStr = GetMoveName(playerMove);
+
+            int result = DetermineWinner(playerMove, computerMove);
+            if (result == 1)
+            {
+                playerScore++;
+                resultLabel.Text = $"你出 {playerStr}，電腦出 {compStr}。你贏了！";
+            }
+            else if (result == -1)
+            {
+                computerScore++;
+                resultLabel.Text = $"你出 {playerStr}，電腦出 {compStr}。你輸了。";
+            }
+            else
+            {
+                resultLabel.Text = $"你出 {playerStr}，電腦出 {compStr}。平手。";
+            }
+        }
+
+        // helper to return Chinese name
+        private string GetMoveName(Move m)
+        {
+            return m == Move.Rock ? "石頭" : m == Move.Paper ? "布" : "剪刀";
+        }
+
+        // helper to return key name used in filenames
+        private string GetMoveKey(Move m)
+        {
+            return m == Move.Rock ? "rock" : m == Move.Paper ? "paper" : "scissors";
+        }
+
+        // try to load an image from project's resources by name (expects Properties.Resources)
+        private Image TryLoadResourceImage(string resourceName)
+        {
+            try
+            {
+                var resourcesType = Type.GetType("Q1.Properties.Resources, Q1");
+                if (resourcesType != null)
+                {
+                    var prop = resourcesType.GetProperty(resourceName, System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+                    if (prop != null)
+                    {
+                        var val = prop.GetValue(null);
+                        return val as Image;
+                    }
+                }
+            }
+            catch
+            {
+                // ignore and fallback
+            }
+            return null;
+        }
+
+        // try to load image files from the provided folder; supports .png, .jpg, .bmp
+        private Image TryLoadImageFromFolder(string baseName)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(imagesFolder)) return null;
+                string[] exts = new[] { ".png", ".jpg", ".jpeg", ".bmp", ".gif" };
+                foreach (var ext in exts)
+                {
+                    string f = Path.Combine(imagesFolder, baseName + ext);
+                    if (File.Exists(f))
+                    {
+                        // FromFile keeps file locked; create a copy
+                        using (var tmp = Image.FromFile(f))
+                        {
+                            return new Bitmap(tmp);
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                // ignore and fallback
+            }
+            return null;
+        }
+
+        // returns 1 if player wins, -1 if computer wins, 0 for tie
+        private int DetermineWinner(Move p, Move c)
+        {
+            if (p == c) return 0;
+            if ((p == Move.Rock && c == Move.Scissors) ||
+                (p == Move.Paper && c == Move.Rock) ||
+                (p == Move.Scissors && c == Move.Paper))
+                return 1;
+            return -1;
+        }
+
+        private void UpdateScores()
+        {
+            playerScoreLabel.Text = $"玩家勝場: {playerScore}";
+            computerScoreLabel.Text = $"電腦勝場: {computerScore}";
+        }
+
+        // create a simple bitmap representing the move (text + background)
+        private Bitmap GetImageForMove(Move m)
+        {
+            int w = Math.Max(100, playerPictureBox.Width);
+            int h = Math.Max(100, playerPictureBox.Height);
+            var bmp = new Bitmap(w, h);
+            using (var g = Graphics.FromImage(bmp))
+            {
+                g.Clear(Color.White);
+                // draw a colored circle
+                Color circleColor = m == Move.Rock ? Color.LightGray : m == Move.Paper ? Color.LightBlue : Color.LightPink;
+                using (var brush = new SolidBrush(circleColor))
+                {
+                    g.FillEllipse(brush, 10, 10, Math.Min(w, h) - 20, Math.Min(w, h) - 20);
+                }
+
+                // draw the chinese character
+                string txt = m == Move.Rock ? "石" : m == Move.Paper ? "布" : "剪";
+                using (var sf = new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center })
+                using (var font = new Font("Segoe UI", Math.Max(24, Math.Min(w, h) / 3), FontStyle.Bold, GraphicsUnit.Point))
+                using (var brush = new SolidBrush(Color.Black))
+                {
+                    Rectangle rect = new Rectangle(0, 0, w, h);
+                    g.DrawString(txt, font, brush, rect, sf);
+                }
+            }
+            return bmp;
+        }
+
+        private void computerPictureBox_Click(object sender, EventArgs e)
+        {
+
+        }
+    }
+}
