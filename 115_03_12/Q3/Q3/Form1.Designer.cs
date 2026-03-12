@@ -1,0 +1,251 @@
+﻿namespace Q3
+{
+    partial class Form1
+    {
+        /// <summary>
+        ///  Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        ///  Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        ///  Required method for Designer support - do not modify
+        ///  the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            btnGenerate = new Button();
+            btnLoadDraw = new Button();
+            btnCompare = new Button();
+            btnExit = new Button();
+            lstDraw = new ListBox();
+            lstMatches = new ListBox();
+            label1 = new Label();
+            label2 = new Label();
+            label3 = new Label();
+            labelNum1 = new Label();
+            labelNum2 = new Label();
+            labelNum3 = new Label();
+            labelNum4 = new Label();
+            labelNum5 = new Label();
+            lblStatus = new Label();
+            openFileDialog1 = new OpenFileDialog();
+            SuspendLayout();
+            // 
+            // btnGenerate
+            // 
+            btnGenerate.Location = new Point(20, 20);
+            btnGenerate.Name = "btnGenerate";
+            btnGenerate.Size = new Size(199, 114);
+            btnGenerate.TabIndex = 0;
+            btnGenerate.Text = "產生號碼";
+            btnGenerate.UseVisualStyleBackColor = true;
+            btnGenerate.Click += btnGenerate_Click;
+            // 
+            // btnLoadDraw
+            // 
+            btnLoadDraw.Location = new Point(241, 20);
+            btnLoadDraw.Name = "btnLoadDraw";
+            btnLoadDraw.Size = new Size(437, 114);
+            btnLoadDraw.TabIndex = 1;
+            btnLoadDraw.Text = "讀取開獎號碼檔案（5 行，每行一個數字）";
+            btnLoadDraw.UseVisualStyleBackColor = true;
+            btnLoadDraw.Click += btnLoadDraw_Click;
+            // 
+            // btnCompare
+            // 
+            btnCompare.Enabled = false;
+            btnCompare.Location = new Point(698, 20);
+            btnCompare.Name = "btnCompare";
+            btnCompare.Size = new Size(214, 57);
+            btnCompare.TabIndex = 2;
+            btnCompare.Text = "比對中獎";
+            btnCompare.UseVisualStyleBackColor = true;
+            btnCompare.Click += btnCompare_Click;
+            // 
+            // btnExit
+            // 
+            btnExit.Location = new Point(698, 92);
+            btnExit.Name = "btnExit";
+            btnExit.Size = new Size(214, 59);
+            btnExit.TabIndex = 3;
+            btnExit.Text = "離開";
+            btnExit.UseVisualStyleBackColor = true;
+            btnExit.Click += btnExit_Click;
+            // 
+            // lstDraw
+            // 
+            lstDraw.FormattingEnabled = true;
+            lstDraw.ItemHeight = 48;
+            lstDraw.Location = new Point(350, 326);
+            lstDraw.Name = "lstDraw";
+            lstDraw.Size = new Size(220, 148);
+            lstDraw.TabIndex = 4;
+            // 
+            // lstMatches
+            // 
+            lstMatches.FormattingEnabled = true;
+            lstMatches.ItemHeight = 48;
+            lstMatches.Location = new Point(599, 326);
+            lstMatches.Name = "lstMatches";
+            lstMatches.Size = new Size(220, 148);
+            lstMatches.TabIndex = 5;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(48, 167);
+            label1.Name = "label1";
+            label1.Size = new Size(210, 48);
+            label1.TabIndex = 6;
+            label1.Text = "產生的號碼";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(360, 257);
+            label2.Name = "label2";
+            label2.Size = new Size(210, 48);
+            label2.TabIndex = 7;
+            label2.Text = "開獎的號碼";
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(623, 257);
+            label3.Name = "label3";
+            label3.Size = new Size(172, 48);
+            label3.TabIndex = 8;
+            label3.Text = "中獎號碼";
+            // 
+            // labelNum1
+            // 
+            labelNum1.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
+            labelNum1.Location = new Point(30, 245);
+            labelNum1.Name = "labelNum1";
+            labelNum1.Size = new Size(72, 72);
+            labelNum1.TabIndex = 9;
+            labelNum1.Text = "--";
+            labelNum1.TextAlign = ContentAlignment.MiddleCenter;
+            labelNum1.Paint += LabelNum_Paint;
+            // 
+            // labelNum2
+            // 
+            labelNum2.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
+            labelNum2.Location = new Point(108, 245);
+            labelNum2.Name = "labelNum2";
+            labelNum2.Size = new Size(72, 72);
+            labelNum2.TabIndex = 10;
+            labelNum2.Text = "--";
+            labelNum2.TextAlign = ContentAlignment.MiddleCenter;
+            labelNum2.Paint += LabelNum_Paint;
+            // 
+            // labelNum3
+            // 
+            labelNum3.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
+            labelNum3.Location = new Point(186, 245);
+            labelNum3.Name = "labelNum3";
+            labelNum3.Size = new Size(72, 72);
+            labelNum3.TabIndex = 11;
+            labelNum3.Text = "--";
+            labelNum3.TextAlign = ContentAlignment.MiddleCenter;
+            labelNum3.Paint += LabelNum_Paint;
+            // 
+            // labelNum4
+            // 
+            labelNum4.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
+            labelNum4.Location = new Point(30, 354);
+            labelNum4.Name = "labelNum4";
+            labelNum4.Size = new Size(72, 72);
+            labelNum4.TabIndex = 12;
+            labelNum4.Text = "--";
+            labelNum4.TextAlign = ContentAlignment.MiddleCenter;
+            labelNum4.Paint += LabelNum_Paint;
+            // 
+            // labelNum5
+            // 
+            labelNum5.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
+            labelNum5.Location = new Point(108, 354);
+            labelNum5.Name = "labelNum5";
+            labelNum5.Size = new Size(72, 72);
+            labelNum5.TabIndex = 13;
+            labelNum5.Text = "--";
+            labelNum5.TextAlign = ContentAlignment.MiddleCenter;
+            labelNum5.Paint += LabelNum_Paint;
+            // 
+            // lblStatus
+            // 
+            lblStatus.Font = new Font("Segoe UI", 18F);
+            lblStatus.Location = new Point(20, 509);
+            lblStatus.Name = "lblStatus";
+            lblStatus.Size = new Size(750, 40);
+            lblStatus.TabIndex = 14;
+            lblStatus.Text = "狀態：等待操作";
+            lblStatus.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // openFileDialog1
+            // 
+            openFileDialog1.Filter = "Text files|*.txt|All files|*.*";
+            openFileDialog1.Title = "選擇開獎號碼檔案";
+            // 
+            // Form1
+            // 
+            AutoScaleDimensions = new SizeF(20F, 48F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(953, 582);
+            Controls.Add(lblStatus);
+            Controls.Add(labelNum5);
+            Controls.Add(labelNum4);
+            Controls.Add(labelNum3);
+            Controls.Add(labelNum2);
+            Controls.Add(labelNum1);
+            Controls.Add(label3);
+            Controls.Add(label2);
+            Controls.Add(label1);
+            Controls.Add(lstMatches);
+            Controls.Add(lstDraw);
+            Controls.Add(btnExit);
+            Controls.Add(btnCompare);
+            Controls.Add(btnLoadDraw);
+            Controls.Add(btnGenerate);
+            Font = new Font("Segoe UI", 18F);
+            Name = "Form1";
+            Text = "樂透號碼產生器";
+            ResumeLayout(false);
+            PerformLayout();
+        }
+
+        #endregion
+
+        private System.Windows.Forms.Button btnGenerate;
+        private System.Windows.Forms.Button btnLoadDraw;
+        private System.Windows.Forms.Button btnCompare;
+        private System.Windows.Forms.Button btnExit;
+        private System.Windows.Forms.ListBox lstDraw;
+        private System.Windows.Forms.ListBox lstMatches;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label labelNum1;
+        private System.Windows.Forms.Label labelNum2;
+        private System.Windows.Forms.Label labelNum3;
+        private System.Windows.Forms.Label labelNum4;
+        private System.Windows.Forms.Label labelNum5;
+        private System.Windows.Forms.Label lblStatus;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
+    }
+}

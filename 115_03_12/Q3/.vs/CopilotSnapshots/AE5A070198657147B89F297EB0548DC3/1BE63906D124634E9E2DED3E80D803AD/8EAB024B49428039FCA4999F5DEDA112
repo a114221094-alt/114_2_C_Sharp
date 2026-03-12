@@ -1,0 +1,201 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Windows.Forms;
+
+namespace Q3
+{
+    public partial class Form1 : Form
+    {
+        private List<int> generatedNumbers = new List<int>();
+        private List<int> drawNumbers = new List<int>();
+        private Random rnd = new Random();
+
+        public Form1()
+        {
+            InitializeComponent();
+            UpdateControlStates();
+        }
+
+        private void btnGenerate_Click(object sender, EventArgs e)
+        {
+            generatedNumbers = GenerateNumbersBasic(5, 1, 49);
+            lstGenerated.Items.Clear();
+            for (int i = 0; i < generatedNumbers.Count; i++)
+            {
+                lstGenerated.Items.Add(generatedNumbers[i]);
+            }
+
+            lstMatches.Items.Clear();
+            UpdateControlStates();
+        }
+
+        private void btnLoadDraw_Click(object sender, EventArgs e)
+        {
+            if (openFileDialog1.ShowDialog() != DialogResult.OK)
+                return;
+
+            string path = openFileDialog1.FileName;
+
+            try
+            {
+                if (!File.Exists(path))
+                {
+                    MessageBox.Show("檔案不存在。", "錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                var rawLines = File.ReadAllLines(path);
+                var lines = new List<string>();
+                foreach (var line in rawLines)
+                {
+                    if (!string.IsNullOrWhiteSpace(line))
+                        lines.Add(line.Trim());
+                }
+
+                if (lines.Count != 5)
+                {
+                    MessageBox.Show("檔案格式錯誤：檔案應包含 5 行，每行一個數字。", "錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                var nums = new List<int>();
+                for (int i = 0; i < lines.Count; i++)
+                {
+                    if (!int.TryParse(lines[i], out int v))
+                    {
+                        MessageBox.Show($"第 {i + 1} 行格式錯誤：無法轉為整數。", "錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    if (v < 1 || v > 49)
+                    {
+                        MessageBox.Show($"第 {i + 1} 行數字超出範圍 (1-49)。", "錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    nums.Add(v);
+                }
+
+                // 檢查是否有重複
+                for (int i = 0; i < nums.Count; i++)
+                {
+                    for (int j = i + 1; j < nums.Count; j++)
+                    {
+                        if (nums[i] == nums[j])
+                        {
+                            MessageBox.Show($"檔案格式錯誤：第 {i + 1} 與第 {j + 1} 行有重複數字。", "錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+                    }
+                }
+
+                // assign and sort
+                drawNumbers = new List<int>(nums);
+                drawNumbers.Sort();
+
+                lstDraw.Items.Clear();
+                for (int i = 0; i < drawNumbers.Count; i++)
+                    lstDraw.Items.Add(drawNumbers[i]);
+
+                MessageBox.Show("開獎號碼讀取完成。", "資訊", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                UpdateControlStates();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("讀取檔案失敗: " + ex.Message, "錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnCompare_Click(object sender, EventArgs e)
+        {
+            lstMatches.Items.Clear();
+
+            if (generatedNumbers == null || generatedNumbers.Count == 0)
+            {
+                MessageBox.Show("請先產生號碼。", "提醒", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if (drawNumbers == null || drawNumbers.Count == 0)
+            {
+                MessageBox.Show("請先讀取開獎號碼檔案。", "提醒", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            var matches = new List<int>();
+            for (int i = 0; i < generatedNumbers.Count; i++)
+            {
+                for (int j = 0; j < drawNumbers.Count; j++)
+                {
+                    if (generatedNumbers[i] == drawNumbers[j])
+                    {
+                        matches.Add(generatedNumbers[i]);
+                        break;
+                    }
+                }
+            }
+
+            matches.Sort();
+            for (int i = 0; i < matches.Count; i++)
+                lstMatches.Items.Add(matches[i]);
+
+            string prize = DeterminePrize(matches.Count);
+            MessageBox.Show($"比對完成，共中 {matches.Count} 個號碼。獎項：{prize}", "結果", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        // 使用基本語法產生不重複亂數（陣列+迴圈+條件），避免使用進階資料結構
+        private List<int> GenerateNumbersBasic(int count, int min, int max)
+        {
+            int[] result = new int[count];
+            int filled = 0;
+            while (filled < count)
+            {
+                int candidate = rnd.Next(min, max + 1);
+                bool exists = false;
+                for (int i = 0; i < filled; i++)
+                {
+                    if (result[i] == candidate)
+                    {
+                        exists = true;
+                        break;
+                    }
+                }
+                if (!exists)
+                {
+                    result[filled] = candidate;
+                    filled++;
+                }
+            }
+
+            // convert to List<int> and sort
+            var list = new List<int>();
+            for (int i = 0; i < result.Length; i++)
+                list.Add(result[i]);
+            list.Sort();
+            return list;
+        }
+
+        private string DeterminePrize(int matchCount)
+        {
+            // 簡單獎項判定示例：5個中 -> 頭獎, 4個 -> 二獎, 3個 -> 三獎, 2個 -> 四獎, 0-1 -> 未中
+            switch (matchCount)
+            {
+                case 5:
+                    return "頭獎";
+                case 4:
+                    return "二獎";
+                case 3:
+                    return "三獎";
+                case 2:
+                    return "四獎";
+                default:
+                    return "未中獎";
+            }
+        }
+
+        private void UpdateControlStates()
+        {
+            // 比對按鈕只在已產生號碼且已讀取開獎號碼時可用
+            bool canCompare = (generatedNumbers != null && generatedNumbers.Count > 0) && (drawNumbers != null && drawNumbers.Count > 0);
+            btnCompare.Enabled = canCompare;
+        }
+    }
+}

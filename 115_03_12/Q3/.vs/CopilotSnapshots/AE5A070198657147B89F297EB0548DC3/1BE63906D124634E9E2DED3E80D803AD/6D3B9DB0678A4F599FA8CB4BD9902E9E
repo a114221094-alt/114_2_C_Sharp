@@ -1,0 +1,171 @@
+﻿namespace Q3
+{
+    partial class Form1
+    {
+        /// <summary>
+        ///  Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        ///  Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        ///  Required method for Designer support - do not modify
+        ///  the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            this.components = new System.ComponentModel.Container();
+            this.btnGenerate = new System.Windows.Forms.Button();
+            this.btnLoadDraw = new System.Windows.Forms.Button();
+            this.btnCompare = new System.Windows.Forms.Button();
+            this.lstGenerated = new System.Windows.Forms.ListBox();
+            this.lstDraw = new System.Windows.Forms.ListBox();
+            this.lstMatches = new System.Windows.Forms.ListBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.SuspendLayout();
+            // 
+            // Form1
+            // 
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(760, 420);
+            this.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.Name = "Form1";
+            this.Text = "樂透號碼產生器";
+            // 
+            // btnGenerate
+            // 
+            this.btnGenerate.Location = new System.Drawing.Point(30, 20);
+            this.btnGenerate.Name = "btnGenerate";
+            this.btnGenerate.Size = new System.Drawing.Size(180, 44);
+            this.btnGenerate.TabIndex = 0;
+            this.btnGenerate.Text = "產生號碼";
+            this.btnGenerate.UseVisualStyleBackColor = true;
+            this.btnGenerate.Click += new System.EventHandler(this.btnGenerate_Click);
+            // 
+            // btnLoadDraw
+            // 
+            this.btnLoadDraw.Location = new System.Drawing.Point(230, 20);
+            this.btnLoadDraw.Name = "btnLoadDraw";
+            this.btnLoadDraw.Size = new System.Drawing.Size(260, 44);
+            this.btnLoadDraw.TabIndex = 1;
+            this.btnLoadDraw.Text = "讀取開獎號碼檔案（5 行，每行一個數字）";
+            this.btnLoadDraw.UseVisualStyleBackColor = true;
+            this.btnLoadDraw.Click += new System.EventHandler(this.btnLoadDraw_Click);
+            // 
+            // btnCompare
+            // 
+            this.btnCompare.Location = new System.Drawing.Point(510, 20);
+            this.btnCompare.Name = "btnCompare";
+            this.btnCompare.Size = new System.Drawing.Size(200, 44);
+            this.btnCompare.TabIndex = 2;
+            this.btnCompare.Text = "比對中獎";
+            this.btnCompare.UseVisualStyleBackColor = true;
+            this.btnCompare.Click += new System.EventHandler(this.btnCompare_Click);
+            this.btnCompare.Enabled = false;
+            // 
+            // lstGenerated
+            // 
+            this.lstGenerated.FormattingEnabled = true;
+            this.lstGenerated.ItemHeight = 30;
+            this.lstGenerated.Location = new System.Drawing.Point(30, 110);
+            this.lstGenerated.Name = "lstGenerated";
+            this.lstGenerated.Size = new System.Drawing.Size(200, 184);
+            this.lstGenerated.TabIndex = 3;
+            // 
+            // lstDraw
+            // 
+            this.lstDraw.FormattingEnabled = true;
+            this.lstDraw.ItemHeight = 30;
+            this.lstDraw.Location = new System.Drawing.Point(270, 110);
+            this.lstDraw.Name = "lstDraw";
+            this.lstDraw.Size = new System.Drawing.Size(200, 184);
+            this.lstDraw.TabIndex = 4;
+            // 
+            // lstMatches
+            // 
+            this.lstMatches.FormattingEnabled = true;
+            this.lstMatches.ItemHeight = 30;
+            this.lstMatches.Location = new System.Drawing.Point(510, 110);
+            this.lstMatches.Name = "lstMatches";
+            this.lstMatches.Size = new System.Drawing.Size(200, 184);
+            this.lstMatches.TabIndex = 5;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(30, 78);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(120, 32);
+            this.label1.TabIndex = 6;
+            this.label1.Text = "產生的號碼";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(270, 78);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(120, 32);
+            this.label2.TabIndex = 7;
+            this.label2.Text = "開獎的號碼";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(510, 78);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(120, 32);
+            this.label3.TabIndex = 8;
+            this.label3.Text = "中獎號碼";
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.Filter = "Text files|*.txt|All files|*.*";
+            this.openFileDialog1.Title = "選擇開獎號碼檔案";
+            // 
+            // Add controls
+            // 
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.lstMatches);
+            this.Controls.Add(this.lstDraw);
+            this.Controls.Add(this.lstGenerated);
+            this.Controls.Add(this.btnCompare);
+            this.Controls.Add(this.btnLoadDraw);
+            this.Controls.Add(this.btnGenerate);
+
+            this.ResumeLayout(false);
+            this.PerformLayout();
+        }
+
+        #endregion
+
+        private System.Windows.Forms.Button btnGenerate;
+        private System.Windows.Forms.Button btnLoadDraw;
+        private System.Windows.Forms.Button btnCompare;
+        private System.Windows.Forms.ListBox lstGenerated;
+        private System.Windows.Forms.ListBox lstDraw;
+        private System.Windows.Forms.ListBox lstMatches;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
+    }
+}
