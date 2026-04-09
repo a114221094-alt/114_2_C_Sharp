@@ -1,0 +1,152 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.IO;
+
+namespace Test_Score_List
+{
+    public partial class Form1 : Form
+    {
+        // 建立一個 List 集合來儲存學號與分數
+        private List<string> studentIdsList = new List<string>();
+        private List<int> scoresList = new List<int>();
+
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void ReadScores(List<string> idsList, List<int> scoresList)
+        {
+            string filePath = "TestScores.txt"; // 分數檔案的路徑
+            // 從檔案中讀取分數並存入 List 集合
+            try
+            {
+                using (StreamReader reader = File.OpenText(filePath))
+                {
+                    while (!reader.EndOfStream)
+                    {
+                        string line = reader.ReadLine();
+                        if (string.IsNullOrWhiteSpace(line)) continue;
+                        
+                        // 以空白分割學號和分數
+                        string[] parts = line.Split(' ');
+                        if (parts.Length >= 2)
+                        {
+                            idsList.Add(parts[0]);
+                            scoresList.Add(int.Parse(parts[1]));
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error reading scores: " + ex.Message);
+            }
+        }
+
+        // DisplayScores 方法用來在列表框中顯示所有分數
+        private void DisplayScores(List<string> idsList, List<int> scoresList)
+        {
+            for (int i = 0; i < scoresList.Count; i++)
+            {
+                testScoresListBox.Items.Add(idsList[i] + " " + scoresList[i]);
+            }
+        }
+
+        private void getScoresButton_Click(object sender, EventArgs e)
+        {
+            double averageScore;    // 用來儲存平均分數
+            int numAboveAverage;    // 用來儲存高於平均分數的數量
+            int numBelowAverage;    // 用來儲存低於平均分數的數量
+
+            // 清除之前的分數
+            studentIdsList.Clear();
+            scoresList.Clear();
+            testScoresListBox.Items.Clear();
+
+            // 從檔案中讀取分數並存入 List 集合
+            ReadScores(studentIdsList, scoresList);
+
+            // 在列表框中顯示所有分數
+            DisplayScores(studentIdsList, scoresList);
+
+            // 計算並顯示平均分數
+            averageScore = Average(scoresList);
+            averageLabel.Text = averageScore.ToString("n1");
+
+            // 計算並顯示高於平均分數的數量
+            numAboveAverage = AboveAverage(scoresList, averageScore);
+            aboveAverageLabel.Text = numAboveAverage.ToString();
+
+            // 計算並顯示低於平均分數的數量
+            numBelowAverage = BelowAverage(scoresList);
+            belowAverageLabel.Text = numBelowAverage.ToString();
+        }
+
+        private double Average(List<int> scoresList)
+        {
+            if (scoresList.Count == 0) return 0;
+            return scoresList.Average();
+        }
+
+        private int AboveAverage(List<int> scoresList, double averageScore)
+        {
+            var query = from score in scoresList
+                        where score > averageScore
+                        select score;
+            return query.Count();
+        }
+
+        private int BelowAverage(List<int> scoresList)
+        {
+            if (scoresList.Count == 0) return 0;
+            double averageScore = scoresList.Average();
+            
+            var query = from score in scoresList
+                        where score < averageScore
+                        select score;
+            return query.Count();
+        }
+
+        //searchButton_Click 方法用來搜尋分數並顯示結果
+        private void searchButton_Click(object sender, EventArgs e)
+        {
+            int searchScore;   // 用來儲存使用者輸入的分數
+            
+            // 取得使用者輸入的分數
+            if (!int.TryParse(searchTextBox.Text, out searchScore))
+            {
+                searchResultLabel.Text = "Please enter a valid score.";
+                return;
+            }
+
+            var results = from i in Enumerable.Range(0, scoresList.Count)
+                          where scoresList[i] == searchScore
+                          select $"position: {i + 1} (ID: {studentIdsList[i]})";
+
+            List<string> foundResults = results.ToList();
+
+            if (foundResults.Count > 0)
+            {
+                searchResultLabel.Text = "Score found at:\n" + string.Join("\n", foundResults);
+            }
+            else
+            {
+                searchResultLabel.Text = "Score not found.";
+            }
+        }
+
+        private void exitButton_Click(object sender, EventArgs e)
+        {
+            // 關閉表單
+            this.Close();
+        }
+    }
+}
