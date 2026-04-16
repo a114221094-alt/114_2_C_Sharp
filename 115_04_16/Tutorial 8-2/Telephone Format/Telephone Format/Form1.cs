@@ -1,0 +1,81 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace Telephone_Format
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        // 檢查號碼是否有效
+        // 接受一個字串參數，若正好是 10 個數字則傳回 true，否則傳回 false。
+        private bool IsValidNumber(string str)
+        {
+            // 檢查字串長度是否剛好為 10
+            if (str.Length != 10)
+            {
+                return false;
+            }
+
+            // 檢查字串中的每一個字元是否皆為數字
+            foreach (char ch in str)
+            {
+                if (!char.IsDigit(ch))
+                {
+                    return false;
+                }
+            }
+
+            // 若符合上述條件則傳回 true
+            return true;
+        }
+
+        // 格式化電話號碼
+        // 接受一個傳址 (by reference) 的字串參數，並將其格式化為台灣的行動電話號碼格式如 XXXX-XXX-XXX
+        private void TelephoneFormat(ref string str)
+        {
+            // 插入連接號，格式化為 XXXX-XXX-XXX
+            str = str.Insert(4, "-");
+            str = str.Insert(8, "-");
+        }
+
+        private void formatButton_Click(object sender, EventArgs e)
+        {
+            // 取得使用者輸入的字串
+            string input = numberTextBox.Text.Trim();
+
+            // 驗證輸入字串是否為有效的 10 位數
+            if (IsValidNumber(input))
+            {
+                // 若格式正確，進行電話號碼的格式轉換
+                TelephoneFormat(ref input);
+                
+                // 顯示結果在 TextBox 或 MessageBox (此處以訊息方塊顯示，再同步回 TextBox)
+                MessageBox.Show(input, "格式化結果");
+                numberTextBox.Text = input;
+            }
+            else
+            {
+                // 若格式錯誤，顯示警告訊息
+                MessageBox.Show("無效的輸入。請輸入剛好 10 個數字的號碼。", "錯誤");
+                numberTextBox.Focus();
+            }
+        }
+
+        private void exitButton_Click(object sender, EventArgs e)
+        {
+            // 關閉目前的視窗 (表單)。
+            this.Close();
+        }
+    }
+}
