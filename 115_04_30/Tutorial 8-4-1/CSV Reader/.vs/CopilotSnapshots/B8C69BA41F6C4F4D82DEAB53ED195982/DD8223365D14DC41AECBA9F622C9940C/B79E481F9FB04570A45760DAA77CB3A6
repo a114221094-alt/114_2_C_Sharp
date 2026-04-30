@@ -1,0 +1,59 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.IO;
+
+namespace CSV_Reader
+{
+    struct Student
+    {
+        public string Class;
+        public string ID;
+        public string Name;
+        public int[] Scores;
+    }
+    public partial class Form1 : Form
+    {
+        private List<Student> gradeBook  = new List<Student>();
+        public Form1()
+        {
+            // 初始化表單的所有UI元件
+            InitializeComponent();
+        }
+
+        private void getScoresButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                StreamReader inputFile;
+
+                using (inputFile = File.OpenText("Gradeses.csv"))
+                {
+                    string line;
+                    while ((line = inputFile.ReadLine()) != null)
+                    {
+                        string[] fields = line.Split(',');
+                        double average = (double.Parse(fields[1]) + double.Parse(fields[2]) + double.Parse(fields[3])) / 3;
+                        averagesListBox.Items.Add($"{fields[0]} 的平均分數是 {average:F2}");
+                    }
+                }
+            }
+            catch 
+            {
+               
+            }
+        }
+
+        private void exitButton_Click(object sender, EventArgs e)
+        {
+            // 關閉目前的表單
+            this.Close();
+        }
+    }
+}
