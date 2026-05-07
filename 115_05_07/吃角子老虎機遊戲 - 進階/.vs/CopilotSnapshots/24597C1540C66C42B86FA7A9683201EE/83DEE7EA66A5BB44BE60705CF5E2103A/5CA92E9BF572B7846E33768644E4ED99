@@ -1,0 +1,171 @@
+﻿namespace 吃角子老虎機遊戲
+{
+    public partial class Form1 : Form
+    {
+        private int balance = 0;
+        private int totalDeposited = 0;
+        private int totalSpins = 0;
+        private int winCount = 0;
+        private Random random = new Random();
+
+        public Form1()
+        {
+            InitializeComponent();
+            LoadImages();
+            InitGame();
+        }
+
+        private void InitGame()
+        {
+            // 設定下注金額選項及預設值
+            comboBox_bet.Items.AddRange(new string[] { "$1", "$5", "$10", "$50" });
+            comboBox_bet.SelectedIndex = 0; // 預設 $1
+
+            // 綁定各控制項的事件
+            button_deposit.Click += Button_deposit_Click;
+            comboBox_bet.SelectedIndexChanged += ComboBox_bet_SelectedIndexChanged;
+            button1.Click += Button1_Click;
+            button2.Click += Button2_Click;
+
+            // 顯示統計標籤
+            label_totalSpins.Visible = true;
+            label_winCount.Visible = true;
+            label_winRate.Visible = true;
+
+            // 初始介面狀態更新
+            UpdateUI(0);
+        }
+
+        private void Button_deposit_Click(object? sender, EventArgs e)
+        {
+            if (int.TryParse(textBox_deposit.Text, out int amount) && amount > 0)
+            {
+                balance += amount;
+                totalDeposited += amount;
+                textBox_deposit.Clear();
+                UpdateUI(0);
+            }
+            else
+            {
+                MessageBox.Show("請輸入有效的存入金額（必須為正整數）");
+            }
+        }
+
+        private int GetCurrentBet()
+        {
+            if (comboBox_bet.SelectedItem == null) return 1;
+            string betStr = comboBox_bet.SelectedItem.ToString()!.Replace("$", "");
+            int.TryParse(betStr, out int bet);
+            return bet;
+        }
+
+        private void ComboBox_bet_SelectedIndexChanged(object? sender, EventArgs e)
+        {
+            // 選項變更時，重新判斷旋轉按鈕是否可用
+            UpdateButtonState();
+        }
+
+        private void Button1_Click(object? sender, EventArgs e)
+        {
+            int bet = GetCurrentBet();
+            if (balance < bet) return;
+
+            // 扣除下注金額及增加旋轉次數
+            balance -= bet;
+            totalSpins++;
+
+            // 隨機產生三個轉輪索引 (0~9)
+            int imgCount = imageList1.Images.Count > 0 ? imageList1.Images.Count : 10;
+            int n1 = random.Next(imgCount);
+            int n2 = random.Next(imgCount);
+            int n3 = random.Next(imgCount);
+
+            // 顯示選擇的圖片
+            if (imageList1.Images.Count > 0)
+            {
+                pictureBox1.Image = imageList1.Images[n1];
+                pictureBox2.Image = imageList1.Images[n2];
+                pictureBox3.Image = imageList1.Images[n3];
+            }
+
+            // 判斷勝負與獎金
+            int prize = 0;
+            if (n1 == n2 && n2 == n3)
+            {
+                prize = bet * 10; // 頭獎
+            }
+            else if (n1 == n2 || n1 == n3 || n2 == n3)
+            {
+                prize = bet * 2; // 普獎
+            }
+
+            if (prize > 0)
+            {
+                winCount++;
+            }
+
+            // 加回獎金與更新介面
+            balance += prize;
+            UpdateUI(prize);
+            UpdateStats();
+        }
+
+        private void Button2_Click(object? sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void UpdateUI(int prize)
+        {
+            label_balance.Text = "餘額：" + balance.ToString("c");
+            label_lastWin.Text = "本次獲得：" + prize.ToString("c");
+
+            UpdateButtonState();
+        }
+
+        private void UpdateStats()
+        {
+            label_totalSpins.Text = $"旋轉：{totalSpins} 次";
+            label_winCount.Text = $"中獎：{winCount} 次";
+
+            double winRate = (totalSpins > 0) ? ((double)winCount / totalSpins) * 100 : 0.0;
+            label_winRate.Text = $"勝率：{winRate:F1}%";
+        }
+
+        private void UpdateButtonState()
+        {
+            int bet = GetCurrentBet();
+            button1.Enabled = (balance >= bet);
+        }
+
+        private void LoadImages()
+        {
+            // 將 10 種水果圖片載入 ImageList1
+            string[] imageNames = { "Apple.bmp", "Banana.bmp", "Cherries.bmp", "Grapes.bmp", "Lemon.bmp", "Lime.bmp", "Orange.bmp", "Pear.bmp", "Strawberry.bmp", "Watermelon.bmp" };
+            
+            try
+            {
+                foreach (string name in imageNames)
+                {
+                    string path = System.IO.Path.Combine(Application.StartupPath, name);
+                    if (System.IO.File.Exists(path))
+                    {
+                        imageList1.Images.Add(Image.FromFile(path));
+                    }
+                }
+
+                // 預設設定起始圖片 (例如隨機或設定為第一張圖片)
+                if (imageList1.Images.Count > 0)
+                {
+                    pictureBox1.Image = imageList1.Images[0];
+                    pictureBox2.Image = imageList1.Images[0];
+                    pictureBox3.Image = imageList1.Images[0];
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("載入圖片發生錯誤: " + ex.Message);
+            }
+        }
+    }
+}
