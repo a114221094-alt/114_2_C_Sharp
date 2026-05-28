@@ -1,0 +1,16 @@
+C:\Users\m303\Desktop\114_2_C_Sharp-main\115_05_28\mutiformvariable\mutiformvariable\bin\Debug\net8.0-windows\mutiformvariable.exe
+C:\Users\m303\Desktop\114_2_C_Sharp-main\115_05_28\mutiformvariable\mutiformvariable\bin\Debug\net8.0-windows\mutiformvariable.deps.json
+C:\Users\m303\Desktop\114_2_C_Sharp-main\115_05_28\mutiformvariable\mutiformvariable\bin\Debug\net8.0-windows\mutiformvariable.runtimeconfig.json
+C:\Users\m303\Desktop\114_2_C_Sharp-main\115_05_28\mutiformvariable\mutiformvariable\bin\Debug\net8.0-windows\mutiformvariable.dll
+C:\Users\m303\Desktop\114_2_C_Sharp-main\115_05_28\mutiformvariable\mutiformvariable\bin\Debug\net8.0-windows\mutiformvariable.pdb
+C:\Users\m303\Desktop\114_2_C_Sharp-main\115_05_28\mutiformvariable\mutiformvariable\obj\Debug\net8.0-windows\mutiformvariable.Form1.resources
+C:\Users\m303\Desktop\114_2_C_Sharp-main\115_05_28\mutiformvariable\mutiformvariable\obj\Debug\net8.0-windows\mutiformvariable.csproj.GenerateResource.cache
+C:\Users\m303\Desktop\114_2_C_Sharp-main\115_05_28\mutiformvariable\mutiformvariable\obj\Debug\net8.0-windows\mutiformvariable.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\m303\Desktop\114_2_C_Sharp-main\115_05_28\mutiformvariable\mutiformvariable\obj\Debug\net8.0-windows\mutiformvariable.AssemblyInfoInputs.cache
+C:\Users\m303\Desktop\114_2_C_Sharp-main\115_05_28\mutiformvariable\mutiformvariable\obj\Debug\net8.0-windows\mutiformvariable.AssemblyInfo.cs
+C:\Users\m303\Desktop\114_2_C_Sharp-main\115_05_28\mutiformvariable\mutiformvariable\obj\Debug\net8.0-windows\mutiformvariable.csproj.CoreCompileInputs.cache
+C:\Users\m303\Desktop\114_2_C_Sharp-main\115_05_28\mutiformvariable\mutiformvariable\obj\Debug\net8.0-windows\mutiformvariable.dll
+C:\Users\m303\Desktop\114_2_C_Sharp-main\115_05_28\mutiformvariable\mutiformvariable\obj\Debug\net8.0-windows\refint\mutiformvariable.dll
+C:\Users\m303\Desktop\114_2_C_Sharp-main\115_05_28\mutiformvariable\mutiformvariable\obj\Debug\net8.0-windows\mutiformvariable.pdb
+C:\Users\m303\Desktop\114_2_C_Sharp-main\115_05_28\mutiformvariable\mutiformvariable\obj\Debug\net8.0-windows\mutiformvariable.genruntimeconfig.cache
+C:\Users\m303\Desktop\114_2_C_Sharp-main\115_05_28\mutiformvariable\mutiformvariable\obj\Debug\net8.0-windows\ref\mutiformvariable.dll

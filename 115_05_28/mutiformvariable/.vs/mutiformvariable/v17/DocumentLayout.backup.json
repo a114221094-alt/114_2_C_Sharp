@@ -1,0 +1,53 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\m303\\Desktop\\114_2_C_Sharp-main\\115_05_28\\mutiformvariable\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{EED1B11A-D318-44D6-9829-A5F396D93B05}|mutiformvariable\\mutiformvariable.csproj|c:\\users\\m303\\desktop\\114_2_c_sharp-main\\115_05_28\\mutiformvariable\\mutiformvariable\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EED1B11A-D318-44D6-9829-A5F396D93B05}|mutiformvariable\\mutiformvariable.csproj|solutionrelative:mutiformvariable\\mainform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EED1B11A-D318-44D6-9829-A5F396D93B05}|mutiformvariable\\mutiformvariable.csproj|c:\\users\\m303\\desktop\\114_2_c_sharp-main\\115_05_28\\mutiformvariable\\mutiformvariable\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{EED1B11A-D318-44D6-9829-A5F396D93B05}|mutiformvariable\\mutiformvariable.csproj|solutionrelative:mutiformvariable\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "MainForm.cs",
+              "DocumentMoniker": "C:\\Users\\m303\\Desktop\\114_2_C_Sharp-main\\115_05_28\\mutiformvariable\\mutiformvariable\\MainForm.cs",
+              "RelativeDocumentMoniker": "mutiformvariable\\MainForm.cs",
+              "ToolTip": "C:\\Users\\m303\\Desktop\\114_2_C_Sharp-main\\115_05_28\\mutiformvariable\\mutiformvariable\\MainForm.cs",
+              "RelativeToolTip": "mutiformvariable\\MainForm.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAwwAgAAAATAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-28T07:28:09.781Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Form1.cs [\u8A2D\u8A08]",
+              "DocumentMoniker": "C:\\Users\\m303\\Desktop\\114_2_C_Sharp-main\\115_05_28\\mutiformvariable\\mutiformvariable\\Form1.cs",
+              "RelativeDocumentMoniker": "mutiformvariable\\Form1.cs",
+              "ToolTip": "C:\\Users\\m303\\Desktop\\114_2_C_Sharp-main\\115_05_28\\mutiformvariable\\mutiformvariable\\Form1.cs [\u8A2D\u8A08]",
+              "RelativeToolTip": "mutiformvariable\\Form1.cs [\u8A2D\u8A08]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-28T07:25:38.507Z",
+              "EditorCaption": " [\u8A2D\u8A08]"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
