@@ -1,0 +1,94 @@
+﻿namespace Tutorial_9_3_3
+{
+    partial class MainForm
+    {
+        /// <summary>
+        ///  Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        ///  Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        ///  Required method for Designer support - do not modify
+        ///  the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            this.buttonOpenAccount = new System.Windows.Forms.Button();
+            this.buttonDeposit = new System.Windows.Forms.Button();
+            this.buttonWithdraw = new System.Windows.Forms.Button();
+            this.buttonExit = new System.Windows.Forms.Button();
+            this.SuspendLayout();
+            // 
+            // buttonOpenAccount
+            // 
+            this.buttonOpenAccount.Location = new System.Drawing.Point(34, 45);
+            this.buttonOpenAccount.Name = "buttonOpenAccount";
+            this.buttonOpenAccount.Size = new System.Drawing.Size(120, 60);
+            this.buttonOpenAccount.TabIndex = 0;
+            this.buttonOpenAccount.Text = "開戶";
+            this.buttonOpenAccount.UseVisualStyleBackColor = true;
+            // 
+            // buttonDeposit
+            // 
+            this.buttonDeposit.Location = new System.Drawing.Point(184, 45);
+            this.buttonDeposit.Name = "buttonDeposit";
+            this.buttonDeposit.Size = new System.Drawing.Size(120, 60);
+            this.buttonDeposit.TabIndex = 1;
+            this.buttonDeposit.Text = "存款";
+            this.buttonDeposit.UseVisualStyleBackColor = true;
+            // 
+            // buttonWithdraw
+            // 
+            this.buttonWithdraw.Location = new System.Drawing.Point(334, 45);
+            this.buttonWithdraw.Name = "buttonWithdraw";
+            this.buttonWithdraw.Size = new System.Drawing.Size(120, 60);
+            this.buttonWithdraw.TabIndex = 2;
+            this.buttonWithdraw.Text = "提款";
+            this.buttonWithdraw.UseVisualStyleBackColor = true;
+            // 
+            // buttonExit
+            // 
+            this.buttonExit.Location = new System.Drawing.Point(484, 45);
+            this.buttonExit.Name = "buttonExit";
+            this.buttonExit.Size = new System.Drawing.Size(120, 60);
+            this.buttonExit.TabIndex = 3;
+            this.buttonExit.Text = "離開";
+            this.buttonExit.UseVisualStyleBackColor = true;
+            // 
+            // MainForm
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(650, 160);
+            this.Controls.Add(this.buttonExit);
+            this.Controls.Add(this.buttonWithdraw);
+            this.Controls.Add(this.buttonDeposit);
+            this.Controls.Add(this.buttonOpenAccount);
+            this.Name = "MainForm";
+            this.Text = "MainForm";
+            this.ResumeLayout(false);
+        }
+
+        #endregion
+
+        private System.Windows.Forms.Button buttonOpenAccount;
+        private System.Windows.Forms.Button buttonDeposit;
+        private System.Windows.Forms.Button buttonWithdraw;
+        private System.Windows.Forms.Button buttonExit;
+    }
+}

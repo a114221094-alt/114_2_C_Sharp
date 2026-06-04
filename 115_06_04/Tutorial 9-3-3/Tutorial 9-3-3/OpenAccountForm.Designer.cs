@@ -1,0 +1,148 @@
+﻿namespace Tutorial_9_3_3
+{
+    partial class OpenAccountForm
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            label1 = new Label();
+            label2 = new Label();
+            label3 = new Label();
+            textBoxAccountNo = new TextBox();
+            textBoxName = new TextBox();
+            textBoxInitialAmount = new TextBox();
+            buttonCreate = new Button();
+            buttonExit = new Button();
+            SuspendLayout();
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(63, 61);
+            label1.Margin = new Padding(5, 0, 5, 0);
+            label1.Name = "label1";
+            label1.Size = new Size(64, 23);
+            label1.TabIndex = 0;
+            label1.Text = "帳號：";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(63, 123);
+            label2.Margin = new Padding(5, 0, 5, 0);
+            label2.Name = "label2";
+            label2.Size = new Size(64, 23);
+            label2.TabIndex = 1;
+            label2.Text = "姓名：";
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(24, 184);
+            label3.Margin = new Padding(5, 0, 5, 0);
+            label3.Name = "label3";
+            label3.Size = new Size(100, 23);
+            label3.TabIndex = 2;
+            label3.Text = "開戶金額：";
+            // 
+            // textBoxAccountNo
+            // 
+            textBoxAccountNo.Location = new Point(138, 57);
+            textBoxAccountNo.Margin = new Padding(5, 5, 5, 5);
+            textBoxAccountNo.Name = "textBoxAccountNo";
+            textBoxAccountNo.Size = new Size(202, 30);
+            textBoxAccountNo.TabIndex = 3;
+            // 
+            // textBoxName
+            // 
+            textBoxName.Location = new Point(138, 118);
+            textBoxName.Margin = new Padding(5, 5, 5, 5);
+            textBoxName.Name = "textBoxName";
+            textBoxName.Size = new Size(202, 30);
+            textBoxName.TabIndex = 4;
+            // 
+            // textBoxInitialAmount
+            // 
+            textBoxInitialAmount.Location = new Point(138, 179);
+            textBoxInitialAmount.Margin = new Padding(5, 5, 5, 5);
+            textBoxInitialAmount.Name = "textBoxInitialAmount";
+            textBoxInitialAmount.Size = new Size(202, 30);
+            textBoxInitialAmount.TabIndex = 5;
+            // 
+            // buttonCreate
+            // 
+            buttonCreate.Location = new Point(377, 178);
+            buttonCreate.Margin = new Padding(5, 5, 5, 5);
+            buttonCreate.Name = "buttonCreate";
+            buttonCreate.Size = new Size(126, 38);
+            buttonCreate.TabIndex = 6;
+            buttonCreate.Text = "建立帳戶";
+            buttonCreate.UseVisualStyleBackColor = true;
+            buttonCreate.Click += buttonCreate_Click;
+            // 
+            // buttonExit
+            // 
+            buttonExit.Location = new Point(377, 118);
+            buttonExit.Margin = new Padding(5, 5, 5, 5);
+            buttonExit.Name = "buttonExit";
+            buttonExit.Size = new Size(126, 38);
+            buttonExit.TabIndex = 7;
+            buttonExit.Text = "離開";
+            buttonExit.UseVisualStyleBackColor = true;
+            buttonExit.Click += buttonExit_Click;
+            // 
+            // OpenAccountForm
+            // 
+            AutoScaleDimensions = new SizeF(11F, 23F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(550, 276);
+            Controls.Add(buttonCreate);
+            Controls.Add(buttonExit);
+            Controls.Add(textBoxInitialAmount);
+            Controls.Add(textBoxName);
+            Controls.Add(textBoxAccountNo);
+            Controls.Add(label3);
+            Controls.Add(label2);
+            Controls.Add(label1);
+            Margin = new Padding(5, 5, 5, 5);
+            Name = "OpenAccountForm";
+            Text = "建立帳戶";
+            ResumeLayout(false);
+            PerformLayout();
+        }
+
+        #endregion
+
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox textBoxAccountNo;
+        private System.Windows.Forms.TextBox textBoxName;
+        private System.Windows.Forms.TextBox textBoxInitialAmount;
+        private System.Windows.Forms.Button buttonCreate;
+        private System.Windows.Forms.Button buttonExit;
+    }
+}

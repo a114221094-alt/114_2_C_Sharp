@@ -1,0 +1,40 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace Tutorial_9_3_3
+{
+    public partial class OpenAccountForm : Form
+    {
+        private List<BankAccount> accounts;
+        public OpenAccountForm(List<BankAccount> accounts)
+        {
+            InitializeComponent();
+            bankAccount = accounts;
+        }
+
+        private void buttonCreate_Click(object sender, EventArgs e)
+        {
+            string accountNumber = textBoxAccountNo.Text;
+            string name = textBoxName.Text;
+            decimal initialAmount;
+            if (decimal.TryParse(textBoxInitialAmount.Text, out initialAmount))
+            {
+                BankAccount newAccount = new BankAccount(accountNumber, name, initialAmount);
+                accounts.Add(newAccount);
+                MessageBox.Show("帳戶建立成功！");
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show("請輸入有效的金額！");
+            }
+        }
+    }
+}
